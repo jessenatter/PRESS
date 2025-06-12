@@ -39,7 +39,7 @@ public class character
     protected Sprite sprite;
     protected BoxCollider2D bc;
     protected Rigidbody2D rb;
-    protected float moveSpeed = 1f;
+    protected float moveSpeed = 1f, lerpSpeed = 0.05f, deceleration = 0.1f;
     public Manager manager;
     protected Vector2 moveVec;
 
@@ -56,7 +56,14 @@ public class character
 
     public virtual void Update()
     {
-        rb.AddForce(moveVec * moveSpeed);
+        if (moveVec.x == 0 && moveVec.y == 0)
+        {
+
+        }
+        else
+        {
+            rb.AddForce(moveVec * moveSpeed);
+        }
     }
 }
 
