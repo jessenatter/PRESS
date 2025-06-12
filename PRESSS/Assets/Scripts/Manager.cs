@@ -39,7 +39,7 @@ public class character
     protected Sprite sprite;
     protected BoxCollider2D bc;
     protected Rigidbody2D rb;
-    protected float moveSpeed = 1f, lerpSpeed = 0.05f, deceleration = 0.1f;
+    protected float moveSpeed = 1f, deceleration = 0.1f;
     public Manager manager;
     protected Vector2 moveVec;
 
@@ -58,7 +58,8 @@ public class character
     {
         if (moveVec.x == 0 && moveVec.y == 0)
         {
-
+            rb.linearVelocityX = Mathf.Lerp(rb.linearVelocityX, 0, deceleration);
+            rb.linearVelocityY = Mathf.Lerp(rb.linearVelocityY, 0, deceleration);
         }
         else
         {
