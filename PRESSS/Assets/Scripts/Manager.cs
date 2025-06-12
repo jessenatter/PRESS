@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
+    private InputSystem_Actions input;
+    public Vector2 moveInput;
     List<character> Characters = new List<character>();
 
-    void Start()
+    void Awake()
     {
+        input = new InputSystem_Actions();
+        input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+
         player player = new player();
         Characters.Add(player);
 
         foreach (character _character in Characters)
-            _character.Start();
+            _character.Start(this);
     }
 
     void Update()
@@ -20,6 +26,9 @@ public class Manager : MonoBehaviour
         foreach (character _character in Characters)
             _character.Update();
     }
+
+    void OnEnable() => input.Enable();
+    void OnDisable() => input.Disable();
 }
 
 public class character
@@ -28,30 +37,42 @@ public class character
     protected GameObject gameObject;
     protected SpriteRenderer sr;
     protected Sprite sprite;
+    protected BoxCollider2D bc;
+    protected Rigidbody2D rb;
+    protected float moveSpeed = 1f;
+    public Manager manager;
+    protected Vector2 moveVec;
 
-    public virtual void Start()
+    public virtual void Start(Manager _manager)
     {
+        manager = _manager;
         gameObject = new GameObject(name);
-        gameObject.AddComponent<SpriteRenderer>();
-        sr = gameObject.GetComponent<SpriteRenderer>();
+        sr = gameObject.AddComponent<SpriteRenderer>();
+        bc = gameObject.AddComponent<BoxCollider2D>();
+        rb = gameObject.AddComponent<Rigidbody2D>();
         sr.sprite = sprite;
+        rb.gravityScale = 0;
     }
 
-    public virtual void Update() { }
+    public virtual void Update()
+    {
+        rb.AddForce(moveVec * moveSpeed);
+    }
 }
 
 public class player : character
 {
-    public override void Start()
+    public override void Start(Manager _manager)
     {
         name = "Player";
         sprite = Resources.Load<Sprite>("Sprites/Player");
-        base.Start();
+        moveSpeed = 3f;
+        base.Start(_manager);
     }
 
     public override void Update()
     {
+        moveVec = manager.moveInput;
         base.Update();
-
     }
 }
