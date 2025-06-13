@@ -70,6 +70,3 @@ public class CameraClass : BaseClass
         gameObject.transform.position = new Vector3(_x, _y,zPos);
     }
 }
-
-// I hate ping
-// BLORB!
