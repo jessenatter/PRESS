@@ -56,7 +56,7 @@ public class Character : BaseClass
     protected Sprite sprite;
     protected BoxCollider2D bc;
     protected Rigidbody2D rb;
-    protected float moveSpeed = 1f, deceleration = 0.05f, health = 100, maxSpeed = 3f;
+    protected float moveSpeed = 1f, health = 100;
     public MovingEntityBehaviour movingEntityBehaviour = new MovingEntityBehaviour(); //all the posible mechanics of a moving entity
     public InputManager inputManager = new InputManager();
     protected Vector2 moveVec,spawnPoint;
@@ -74,6 +74,7 @@ public class Character : BaseClass
         rb.gravityScale = 0;
 
         movingEntityBehaviour.rb = rb;
+        movingEntityBehaviour.moveSpeed = moveSpeed;
 
         gameObject.transform.position = spawnPoint;
     }
@@ -102,8 +103,7 @@ public class Player : Character
     {
         name = "Player";
         sprite = Resources.Load<Sprite>("Sprites/Player");
-        moveSpeed = 2f;
-        maxSpeed = 5;
+        moveSpeed = 1.2f;
 
         inputManager.movingEntityBehaviour = movingEntityBehaviour;
         inputManager.Start();
@@ -124,7 +124,7 @@ public class Enemy : Character
     {
         name = "Enemy";
         sprite = Resources.Load<Sprite>("Sprites/Enemy");
-        moveSpeed = 1.2f;
+        moveSpeed = 0.7f;
         spawnPoint = new Vector2(2, 2);
         base.Start(_manager);
     }
