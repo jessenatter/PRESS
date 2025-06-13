@@ -72,7 +72,5 @@ public class MovingEntityBehaviour : MonoBehaviour
             dashTime = dashMaxTime;
             rb.linearVelocity = lastDir.normalized * dashSpeed;
         }
-
-        //Debug.Log("Dash Input: " + dashInput.ToString() + "\nDash Able: " + dashAble.ToString() + "\nIs Dashing: " + isDashing.ToString());
     }
 }
