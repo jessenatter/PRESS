@@ -60,6 +60,8 @@ public class Player : Character
 
         base.Start(_manager);
 
+        gameObject.layer = LayerMask.NameToLayer("Player");
+
         if (movingEntityBehaviour != null)
         {
             inputManager.movingEntityBehaviour = movingEntityBehaviour;
@@ -88,7 +90,7 @@ public class Enemy : Character
         spawnPoint = new Vector2(2, 2);
 
         base.Start(_manager);
-
+        rb.excludeLayers = LayerMask.NameToLayer("Player");
         movingEntityBehaviour.moveSpeed = 3.5f;
     }
 
