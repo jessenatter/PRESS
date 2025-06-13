@@ -9,6 +9,7 @@ public class MovingEntityBehaviour : MonoBehaviour
     public float moveSpeed = 7; //current move speed
 
     [Header ("Dash Settings")]
+
     [HideInInspector] public bool dashInput;
     [HideInInspector] public bool dashAble = true;
     [HideInInspector] public bool isDashing = false;
@@ -20,7 +21,7 @@ public class MovingEntityBehaviour : MonoBehaviour
 
     [HideInInspector] public Vector2 lastDir;
 
-    public virtual void Update() //called in character class
+    public virtual void ClassUpdate() //called in character class
     {
         DirectionHandler();
         if (!isDashing)
