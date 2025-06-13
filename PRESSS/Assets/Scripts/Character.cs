@@ -90,7 +90,9 @@ public class Enemy : Character
         spawnPoint = new Vector2(2, 2);
 
         base.Start(_manager);
-        rb.excludeLayers = LayerMask.NameToLayer("Player");
+
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
+
         movingEntityBehaviour.moveSpeed = 3.5f;
     }
 
