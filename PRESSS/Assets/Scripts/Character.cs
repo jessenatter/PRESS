@@ -10,6 +10,7 @@ public class Character : BaseClass
     protected float moveSpeed = 1f, deceleration = 0.05f, health = 100, maxSpeed = 3f;
     public MovingEntityBehaviour movingEntityBehaviour; //all the posible mechanics of a moving entity
     protected Vector2 moveVec, spawnPoint;
+    public CollisionBehaviour collisionBehaviour;
 
     override public void Start(Manager _manager)
     {
@@ -23,6 +24,7 @@ public class Character : BaseClass
         movingEntityBehaviour = gameObject.GetComponent<MovingEntityBehaviour>();
         bc = gameObject.GetComponent<BoxCollider2D>();
         rb = gameObject.GetComponent<Rigidbody2D>();
+        collisionBehaviour = new CollisionBehaviour();
 
         sr.sprite = sprite;
         movingEntityBehaviour.rb = rb;
@@ -32,6 +34,7 @@ public class Character : BaseClass
 
     override public void Update()
     {
+        base.Update();
         movingEntityBehaviour.ClassUpdate();
     }
 
@@ -50,15 +53,17 @@ public class Character : BaseClass
 
 public class Player : Character
 {
+    protected LayerMask enemylayer;
     public InputManager inputManager = new InputManager();
     public override void Start(Manager _manager)
     {
         name = "Player";
         sprite = Resources.Load<Sprite>("Sprites/Player");
-        //moveSpeed = 2f;
-        //maxSpeed = 5;
+        enemylayer = LayerMask.NameToLayer("Enemy");
 
         base.Start(_manager);
+
+        gameObject.layer = LayerMask.NameToLayer("Player");
 
         if (movingEntityBehaviour != null)
         {
@@ -75,19 +80,29 @@ public class Player : Character
         {
             inputManager.Update();
         }
+
+        if (collisionBehaviour.CheckCollision(enemylayer, bc))
+        {
+            
+        }
     }
 }
 
 public class Enemy : Character
 {
+    protected LayerMask boxLayer;
+
     public override void Start(Manager _manager)
     {
+        boxLayer = LayerMask.NameToLayer("Box");
         name = "Enemy";
         sprite = Resources.Load<Sprite>("Sprites/Enemy");
-        moveSpeed = 1.2f;
+        moveSpeed = 0.8f;
         spawnPoint = new Vector2(2, 2);
 
         base.Start(_manager);
+
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         movingEntityBehaviour.moveSpeed = 3.5f;
     }
@@ -102,5 +117,11 @@ public class Enemy : Character
             movingEntityBehaviour.moveInput = playerEnemyVector;
 
         base.Update();
+
+        if (collisionBehaviour.CheckCollision(boxLayer, bc))
+        {
+
+        }
     }
+
 }

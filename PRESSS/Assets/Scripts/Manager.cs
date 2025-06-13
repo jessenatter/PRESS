@@ -54,24 +54,17 @@ public class BaseClass
 
 public class CameraClass : BaseClass
 {
-    float lerpSpeed = 0.5f,zPos = -13;
-    GameObject gameObject,target;
+    GameObject gameObject;
 
     public override void Start(Manager _manager)
     {
         gameObject = GameObject.FindGameObjectWithTag("MainCamera");
         base.Start(_manager);
-        target = manager.player.gameObject;
     }
 
     public override void Update()
     {
         base.Update();
-
-        float _x = Mathf.Lerp(gameObject.transform.position.x, target.transform.position.x, lerpSpeed);
-        float _y = Mathf.Lerp(gameObject.transform.position.y, target.transform.position.y, lerpSpeed);
-
-        gameObject.transform.position = new Vector3(_x, _y,zPos);
     }
 }
 
