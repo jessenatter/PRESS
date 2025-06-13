@@ -86,7 +86,10 @@ public class Enemy : Character
         sprite = Resources.Load<Sprite>("Sprites/Enemy");
         moveSpeed = 1.2f;
         spawnPoint = new Vector2(2, 2);
+
         base.Start(_manager);
+
+        movingEntityBehaviour.moveSpeed = 3.5f;
     }
 
     public override void Update()
