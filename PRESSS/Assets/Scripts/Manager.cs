@@ -71,4 +71,4 @@ public class CameraClass : BaseClass
     }
 }
 
-// ping here!!
+// I hate ping
