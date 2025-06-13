@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.U2D;
 
 public class Manager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Manager : MonoBehaviour
     int enemyCount = 1;
     public Player player = new Player();
     CameraClass cameraClass = new CameraClass();
+    public BoxClass boxClass = new BoxClass();
 
     void Awake()
     {
@@ -26,6 +28,7 @@ public class Manager : MonoBehaviour
             BaseClasses.Add(character);
 
         BaseClasses.Add(cameraClass);
+        BaseClasses.Add(boxClass);
 
         foreach (BaseClass _baseClass in BaseClasses)
             _baseClass.Start(this);
@@ -37,6 +40,7 @@ public class Manager : MonoBehaviour
             _character.Update();
 
         cameraClass.Update();
+        boxClass.Update();
     }
 }
 
@@ -71,4 +75,33 @@ public class CameraClass : BaseClass
     }
 }
 
-// BLORB!
+public class BoxClass : BaseClass
+{
+    public GameObject gameObject;
+    protected SpriteRenderer sr;
+    protected Sprite sprite;
+    protected BoxCollider2D bc;
+    protected Rigidbody2D rb;
+    protected Vector2 spawnPoint;
+    public BoxBehaviour boxBehaviour;
+
+    public override void Start(Manager _manager)
+    {
+        base.Start(_manager);
+
+        gameObject = Object.Instantiate(Resources.Load<GameObject>("Prefab/Box"));
+
+        //Components
+        sr = gameObject.GetComponent<SpriteRenderer>();
+        boxBehaviour = gameObject.GetComponent<BoxBehaviour>();
+        bc = gameObject.GetComponent<BoxCollider2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
+
+        gameObject.transform.position = spawnPoint;
+    }
+
+    public override void Update()
+    {
+
+    }
+}

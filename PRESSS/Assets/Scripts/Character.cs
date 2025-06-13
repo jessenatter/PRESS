@@ -15,15 +15,16 @@ public class Character : BaseClass
     {
         base.Start(_manager);
 
-        gameObject = new GameObject(name);
-        sr = gameObject.AddComponent<SpriteRenderer>();
-        movingEntityBehaviour = gameObject.AddComponent<MovingEntityBehaviour>();
-        bc = gameObject.AddComponent<BoxCollider2D>();
-        rb = gameObject.AddComponent<Rigidbody2D>();
+        gameObject = Object.Instantiate(Resources.Load<GameObject>("Prefab/Character"));
+        gameObject.name = name;
+
+        //Components
+        sr = gameObject.GetComponent<SpriteRenderer>();
+        movingEntityBehaviour = gameObject.GetComponent<MovingEntityBehaviour>();
+        bc = gameObject.GetComponent<BoxCollider2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
 
         sr.sprite = sprite;
-        rb.gravityScale = 0;
-
         movingEntityBehaviour.rb = rb;
 
         gameObject.transform.position = spawnPoint;
@@ -31,7 +32,7 @@ public class Character : BaseClass
 
     override public void Update()
     {
-        movingEntityBehaviour.Update();
+        movingEntityBehaviour.ClassUpdate();
     }
 
     public virtual void Hurt(float damage)
