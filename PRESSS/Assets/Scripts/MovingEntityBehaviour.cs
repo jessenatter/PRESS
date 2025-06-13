@@ -74,13 +74,22 @@ public class MovingEntityBehaviour : MonoBehaviour
             rb.linearVelocity = lastDir.normalized * dashSpeed;
         }
     }
+
+    public void CancelDash()
+    {
+        isDashing = false;
+        dashAble = true;
+
+        dashTime = 0;
+        dashCD = dashMaxCD;
+    }
 }
 
 public class CollisionBehaviour
 {
     public bool CheckCollision(LayerMask layer,BoxCollider2D bc)
     {
-        bool hit = Physics2D.BoxCast(bc.transform.position, bc.size, 0, Vector2.zero);
+        bool hit = Physics2D.BoxCast(bc.transform.position, bc.size, layer, Vector2.zero);
         return hit;
     }
 }

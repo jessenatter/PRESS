@@ -90,11 +90,18 @@ public class BoxClass : BaseClass
         bc = gameObject.GetComponent<BoxCollider2D>();
         rb = gameObject.GetComponent<Rigidbody2D>();
 
+        boxBehaviour.bc = bc;
+        boxBehaviour.rb = rb;
+        boxBehaviour.manager = manager;
+        boxBehaviour.player = manager.player;
+
         gameObject.transform.position = spawnPoint;
+
+        boxBehaviour.ClassStart();
     }
 
     public override void Update()
     {
-
+        boxBehaviour.ClassUpdate();
     }
 }
