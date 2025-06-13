@@ -1,24 +1,24 @@
 using UnityEngine;
 
-public class MovingEntityBehaviour
+public class MovingEntityBehaviour : MonoBehaviour
 {
-    public Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
 
     [Header ("Move Settings")]
-    public Vector2 moveInput;
+    [HideInInspector] public Vector2 moveInput;
     public float moveSpeed = 7; //current move speed
 
     [Header ("Dash Settings")]
-    public bool dashInput;
-    public bool dashAble = true;
-    public bool isDashing = false;
+    [HideInInspector] public bool dashInput;
+    [HideInInspector] public bool dashAble = true;
+    [HideInInspector] public bool isDashing = false;
     public float dashSpeed = 20;
     public float dashMaxTime = 100;
-    public float dashTime = 0; //current amount of time dash has been going on
+    [HideInInspector] public float dashTime = 0; //current amount of time dash has been going on
     public float dashMaxCD = 120;
-    public float dashCD = 0; //current amount of time dash has been on cooldown
+    [HideInInspector] public float dashCD = 0; //current amount of time dash has been on cooldown
 
-    public Vector2 lastDir;
+    [HideInInspector] public Vector2 lastDir;
 
     public virtual void Update() //called in character class
     {
@@ -73,6 +73,6 @@ public class MovingEntityBehaviour
             rb.linearVelocity = lastDir.normalized * dashSpeed;
         }
 
-        Debug.Log("Dash Input: " + dashInput.ToString() + "\nDash Able: " + dashAble.ToString() + "\nIs Dashing: " + isDashing.ToString());
+        //Debug.Log("Dash Input: " + dashInput.ToString() + "\nDash Able: " + dashAble.ToString() + "\nIs Dashing: " + isDashing.ToString());
     }
 }

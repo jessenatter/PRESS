@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class Manager : MonoBehaviour
 {
-    [HideInInspector] public Vector2 moveInput;
     List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
 
@@ -47,99 +46,6 @@ public class BaseClass
     public Manager manager;
     virtual public void Start(Manager _manager) { manager = _manager; }
     virtual public void Update() { }
-}
-
-public class Character : BaseClass
-{
-    public GameObject gameObject;
-    protected SpriteRenderer sr;
-    protected Sprite sprite;
-    protected BoxCollider2D bc;
-    protected Rigidbody2D rb;
-    protected float moveSpeed = 1f, deceleration = 0.05f, health = 100, maxSpeed = 3f;
-    public MovingEntityBehaviour movingEntityBehaviour = new MovingEntityBehaviour(); //all the posible mechanics of a moving entity
-    public InputManager inputManager = new InputManager();
-    protected Vector2 moveVec,spawnPoint;
-
-    override public void Start(Manager _manager)
-    {
-        base.Start(_manager);
-
-        gameObject = new GameObject(name);
-        sr = gameObject.AddComponent<SpriteRenderer>();
-        bc = gameObject.AddComponent<BoxCollider2D>();
-        rb = gameObject.AddComponent<Rigidbody2D>();
-        
-        sr.sprite = sprite;
-        rb.gravityScale = 0;
-
-        movingEntityBehaviour.rb = rb;
-
-        gameObject.transform.position = spawnPoint;
-    }
-
-    override public void Update()
-    {
-        movingEntityBehaviour.Update();
-    }
-
-    public virtual void Hurt(float damage)
-    {
-        health -= damage;
-        if (health <= 0)
-            Die();
-    }
-
-    protected virtual void Die()
-    {
-
-    }
-}
-
-public class Player : Character
-{
-    public override void Start(Manager _manager)
-    {
-        name = "Player";
-        sprite = Resources.Load<Sprite>("Sprites/Player");
-        moveSpeed = 2f;
-        maxSpeed = 5;
-
-        inputManager.movingEntityBehaviour = movingEntityBehaviour;
-        inputManager.Start();
-
-        base.Start(_manager);
-    }
-
-    public override void Update()
-    {
-        inputManager.Update();
-        base.Update();
-    }
-}
-
-public class Enemy : Character
-{
-    public override void Start(Manager _manager)
-    {
-        name = "Enemy";
-        sprite = Resources.Load<Sprite>("Sprites/Enemy");
-        moveSpeed = 1.2f;
-        spawnPoint = new Vector2(2, 2);
-        base.Start(_manager);
-    }
-
-    public override void Update()
-    {
-        Vector2 playerEnemyVector = manager.player.gameObject.transform.position - gameObject.transform.position;
-
-        if (Mathf.Round(playerEnemyVector.magnitude) == 0)
-            movingEntityBehaviour.moveInput = Vector2.zero;
-        else
-            movingEntityBehaviour.moveInput = playerEnemyVector;
-
-        base.Update();
-    }
 }
 
 public class CameraClass : BaseClass
