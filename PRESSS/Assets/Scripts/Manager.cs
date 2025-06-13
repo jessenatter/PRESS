@@ -5,62 +5,66 @@ using UnityEngine.InputSystem;
 
 public class Manager : MonoBehaviour
 {
-    //private InputActionMap playerInput;
     [HideInInspector] public Vector2 moveInput;
-    List<character> Characters = new List<character>();
+    List<Character> Characters = new List<Character>();
+    List<BaseClass> BaseClasses = new List<BaseClass>();
+
     int enemyCount = 1;
-    public player player = new player();
+    public Player player = new Player();
+    CameraClass cameraClass = new CameraClass();
 
     void Awake()
     {
-        //playerInput = InputSystem.actions.FindActionMap("Player");
-        //input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        //input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
-
         Characters.Add(player);
 
         for(int i = 0; i < enemyCount; i++)
         {
-            enemy enemy = new enemy();
+            Enemy enemy = new Enemy();
             Characters.Add(enemy);
         }
 
-        foreach (character _character in Characters)
-            _character.Start(this);
+        foreach (Character character in Characters)
+            BaseClasses.Add(character);
+
+        BaseClasses.Add(cameraClass);
+
+        foreach (BaseClass _baseClass in BaseClasses)
+            _baseClass.Start(this);
     }
 
     void Update()
     {
-        foreach (character _character in Characters)
+        foreach (Character _character in Characters)
             _character.Update();
-    }
 
-    //void OnEnable() => input.Enable();
-    //void OnDisable() => input.Disable();
-
-    void InputHandler()
-    {
-
+        cameraClass.Update();
     }
 }
 
-public class character
+public class BaseClass
 {
-    protected string name = "character";
+    public string name = "Character";
+    public Manager manager;
+    virtual public void Start(Manager _manager) { manager = _manager; }
+    virtual public void Update() { }
+}
+
+public class Character : BaseClass
+{
     public GameObject gameObject;
     protected SpriteRenderer sr;
     protected Sprite sprite;
     protected BoxCollider2D bc;
     protected Rigidbody2D rb;
     protected float moveSpeed = 1f, deceleration = 0.05f, health = 100, maxSpeed = 3f;
-    public Manager manager;
     public MovingEntityBehaviour movingEntityBehaviour = new MovingEntityBehaviour(); //all the posible mechanics of a moving entity
     public InputManager inputManager = new InputManager();
     protected Vector2 moveVec,spawnPoint;
 
-    public virtual void Start(Manager _manager)
+    override public void Start(Manager _manager)
     {
-        manager = _manager;
+        base.Start(_manager);
+
         gameObject = new GameObject(name);
         sr = gameObject.AddComponent<SpriteRenderer>();
         bc = gameObject.AddComponent<BoxCollider2D>();
@@ -74,26 +78,10 @@ public class character
         gameObject.transform.position = spawnPoint;
     }
 
-    public virtual void Update()
+    override public void Update()
     {
         movingEntityBehaviour.Update();
     }
-
-    /*protected virtual void Move()
-    {
-        if (moveVec.x == 0 && moveVec.y == 0)
-        {
-            rb.linearVelocityX = Mathf.Lerp(rb.linearVelocityX, 0, deceleration);
-            rb.linearVelocityY = Mathf.Lerp(rb.linearVelocityY, 0, deceleration);
-        }
-        else
-        {
-            rb.AddForce(moveVec * moveSpeed);
-        }
-
-        rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
-        rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -maxSpeed, maxSpeed);
-    }*/
 
     public virtual void Hurt(float damage)
     {
@@ -108,7 +96,7 @@ public class character
     }
 }
 
-public class player : character
+public class Player : Character
 {
     public override void Start(Manager _manager)
     {
@@ -126,12 +114,11 @@ public class player : character
     public override void Update()
     {
         inputManager.Update();
-        //moveVec = manager.moveInput;
         base.Update();
     }
 }
 
-public class enemy : character
+public class Enemy : Character
 {
     public override void Start(Manager _manager)
     {
@@ -152,5 +139,28 @@ public class enemy : character
             movingEntityBehaviour.moveInput = playerEnemyVector;
 
         base.Update();
+    }
+}
+
+public class CameraClass : BaseClass
+{
+    float lerpSpeed = 0.5f,zPos = -13;
+    GameObject gameObject,target;
+
+    public override void Start(Manager _manager)
+    {
+        gameObject = GameObject.FindGameObjectWithTag("MainCamera");
+        base.Start(_manager);
+        target = manager.player.gameObject;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        float _x = Mathf.Lerp(gameObject.transform.position.x, target.transform.position.x, lerpSpeed);
+        float _y = Mathf.Lerp(gameObject.transform.position.y, target.transform.position.y, lerpSpeed);
+
+        gameObject.transform.position = new Vector3(_x, _y,zPos);
     }
 }
