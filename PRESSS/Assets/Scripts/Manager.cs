@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Manager : MonoBehaviour
 {
-    private InputSystem_Actions input;
+    //private InputActionMap playerInput;
     [HideInInspector] public Vector2 moveInput;
     List<character> Characters = new List<character>();
     int enemyCount = 1;
@@ -12,9 +13,9 @@ public class Manager : MonoBehaviour
 
     void Awake()
     {
-        input = new InputSystem_Actions();
-        input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-        input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        //playerInput = InputSystem.actions.FindActionMap("Player");
+        //input.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        //input.Player.Move.canceled += ctx => moveInput = Vector2.zero;
 
         Characters.Add(player);
 
@@ -34,8 +35,13 @@ public class Manager : MonoBehaviour
             _character.Update();
     }
 
-    void OnEnable() => input.Enable();
-    void OnDisable() => input.Disable();
+    //void OnEnable() => input.Enable();
+    //void OnDisable() => input.Disable();
+
+    void InputHandler()
+    {
+
+    }
 }
 
 public class character
@@ -48,6 +54,8 @@ public class character
     protected Rigidbody2D rb;
     protected float moveSpeed = 1f, deceleration = 0.05f, health = 100, maxSpeed = 3f;
     public Manager manager;
+    public MovingEntityBehaviour movingEntityBehaviour = new MovingEntityBehaviour(); //all the posible mechanics of a moving entity
+    public InputManager inputManager = new InputManager();
     protected Vector2 moveVec,spawnPoint;
 
     public virtual void Start(Manager _manager)
@@ -57,17 +65,21 @@ public class character
         sr = gameObject.AddComponent<SpriteRenderer>();
         bc = gameObject.AddComponent<BoxCollider2D>();
         rb = gameObject.AddComponent<Rigidbody2D>();
+        
         sr.sprite = sprite;
         rb.gravityScale = 0;
+
+        movingEntityBehaviour.rb = rb;
+
         gameObject.transform.position = spawnPoint;
     }
 
     public virtual void Update()
     {
-        Move();
+        movingEntityBehaviour.Update();
     }
 
-    protected virtual void Move()
+    /*protected virtual void Move()
     {
         if (moveVec.x == 0 && moveVec.y == 0)
         {
@@ -81,7 +93,7 @@ public class character
 
         rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
         rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -maxSpeed, maxSpeed);
-    }
+    }*/
 
     public virtual void Hurt(float damage)
     {
@@ -104,12 +116,17 @@ public class player : character
         sprite = Resources.Load<Sprite>("Sprites/Player");
         moveSpeed = 2f;
         maxSpeed = 5;
+
+        inputManager.movingEntityBehaviour = movingEntityBehaviour;
+        inputManager.Start();
+
         base.Start(_manager);
     }
 
     public override void Update()
     {
-        moveVec = manager.moveInput;
+        inputManager.Update();
+        //moveVec = manager.moveInput;
         base.Update();
     }
 }
@@ -130,9 +147,9 @@ public class enemy : character
         Vector2 playerEnemyVector = manager.player.gameObject.transform.position - gameObject.transform.position;
 
         if (Mathf.Round(playerEnemyVector.magnitude) == 0)
-            moveVec = Vector2.zero;
+            movingEntityBehaviour.moveInput = Vector2.zero;
         else
-            moveVec = playerEnemyVector;
+            movingEntityBehaviour.moveInput = playerEnemyVector;
 
         base.Update();
     }
