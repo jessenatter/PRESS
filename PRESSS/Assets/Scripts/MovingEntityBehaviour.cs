@@ -29,7 +29,6 @@ public class MovingEntityBehaviour : MonoBehaviour
             Move(moveInput);
         }
         Dash(dashInput);
-        
     }
 
     void DirectionHandler()
@@ -87,9 +86,9 @@ public class MovingEntityBehaviour : MonoBehaviour
 
 public class CollisionBehaviour
 {
-    public bool CheckCollision(LayerMask layer,BoxCollider2D bc)
+    public bool CheckCollision(LayerMask layer, BoxCollider2D bc)
     {
-        bool hit = Physics2D.BoxCast(bc.transform.position, bc.size, layer, Vector2.zero);
+        bool hit = Physics2D.BoxCast(bc.transform.position, bc.size * 1.1f,0,Vector2.down,0,layer);
         return hit;
     }
 }
