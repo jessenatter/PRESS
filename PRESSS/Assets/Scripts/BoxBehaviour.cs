@@ -87,11 +87,27 @@ public class BoxBehaviour : MonoBehaviour
             if (player.movingEntityBehaviour.isGrabbing)
             {
                 isGrabbed = true;
+
+                /*GameObject compoundObject = new GameObject("Player/Box Parent"); 
+                Rigidbody2D _rb = compoundObject.AddComponent<Rigidbody2D>();
+                MovingEntityBehaviour _meb = compoundObject.AddComponent<MovingEntityBehaviour>();
+
+                playerTransform.parent = compoundObject.transform;
+                transform.parent = compoundObject.transform;
+
+                player.movingEntityBehaviour = _meb;
+
+                _rb.gravityScale = 0;*/
+
+
                 transform.parent = playerTransform;
-                rb.bodyType = RigidbodyType2D.Kinematic;
+
+                rb.simulated = false;
+
+                /*rb.bodyType = RigidbodyType2D.Kinematic;
                 rb.useFullKinematicContacts = true;
                 rb.linearDamping = 0;
-                rb.linearVelocity = player.gameObject.GetComponent<Rigidbody2D>().linearVelocity;
+                rb.linearVelocity = player.gameObject.GetComponent<Rigidbody2D>().linearVelocity;*/
             }
         }
 
@@ -107,8 +123,16 @@ public class BoxBehaviour : MonoBehaviour
     public void CancelGrab()
     {
         isGrabbed = false;
+
+        rb.simulated = true;
         transform.parent = null;
-        rb.bodyType = RigidbodyType2D.Dynamic;
+
+        /*playerTransform.parent = null;
+        player.movingEntityBehaviour = player.gameObject.GetComponent<MovingEntityBehaviour>();
+
+        Destroy(GameObject.Find("Player/Box Parent"));*/
+
+        //rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     void Launch(Vector2 dir)
