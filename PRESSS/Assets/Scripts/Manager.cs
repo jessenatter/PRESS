@@ -9,7 +9,7 @@ public class Manager : MonoBehaviour
     public List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
 
-    int enemyCount = 1;
+    int enemyCount = 3;
     public Player player = new Player();
     CameraClass cameraClass = new CameraClass();
     public BoxClass boxClass = new BoxClass();
@@ -94,7 +94,7 @@ public class BoxClass : BaseClass
     public GameObject gameObject;
     protected SpriteRenderer sr;
     protected Sprite sprite;
-    protected BoxCollider2D bc;
+    public BoxCollider2D bc;
     public Rigidbody2D rb;
     protected Vector2 spawnPoint;
     public BoxBehaviour boxBehaviour;

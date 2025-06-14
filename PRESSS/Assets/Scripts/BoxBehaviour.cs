@@ -19,6 +19,7 @@ public class BoxBehaviour : MonoBehaviour
 
     bool isGrabbed;
 
+    BoxCollider2D tempBC;
     float defaultDamping;
 
     CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
@@ -28,15 +29,17 @@ public class BoxBehaviour : MonoBehaviour
         playerTransform = player.gameObject.transform;
         defaultDamping = rb.linearDamping;
 
+        tempBC = player.gameObject.AddComponent<BoxCollider2D>(); //stop the box from going through the wall
+
         playerMask = LayerMask.GetMask("Player");
         wallMask = LayerMask.GetMask("Wall");
     }
 
     public virtual void ClassUpdate()
     {
-        DampingCheck();
         GrabCheck();
         LaunchCheck();
+        DampingCheck();
         WallCheck();
     }
 
@@ -101,6 +104,12 @@ public class BoxBehaviour : MonoBehaviour
                 _rb.gravityScale = 0;*/
 
 
+                
+                tempBC.size = bc.size;
+                tempBC.offset = new Vector2(transform.position.x - playerTransform.position.x, transform.position.y - playerTransform.position.y);
+
+                tempBC.enabled = true;
+
                 transform.parent = playerTransform;
 
                 rb.simulated = false;
@@ -128,6 +137,9 @@ public class BoxBehaviour : MonoBehaviour
         rb.simulated = true;
         transform.parent = null;
 
+        bc.enabled = true;
+        tempBC.enabled = false;
+
         /*playerTransform.parent = null;
         player.movingEntityBehaviour = player.gameObject.GetComponent<MovingEntityBehaviour>();
 
@@ -152,7 +164,7 @@ public class BoxBehaviour : MonoBehaviour
 
     Vector2 LaunchDirection()
     {
-        if (Mathf.Abs(playerTransform.position.x - transform.position.x) < bc.size.x / 2)
+        if (Mathf.Abs(playerTransform.position.x - transform.position.x) < (bc.size.x / 2 + player.gameObject.GetComponent<BoxCollider2D>().size.x / 2))
         {
             if (playerTransform.position.y > transform.position.y)
             {
@@ -164,7 +176,7 @@ public class BoxBehaviour : MonoBehaviour
             }
         }
 
-        if (Mathf.Abs(playerTransform.position.y - transform.position.y) < bc.size.y / 2)
+        if (Mathf.Abs(playerTransform.position.y - transform.position.y) < (bc.size.y / 2 + player.gameObject.GetComponent<BoxCollider2D>().size.y / 2))
         {
             if (playerTransform.position.x > transform.position.x)
             {
