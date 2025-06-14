@@ -106,6 +106,7 @@ public class CollisionBehaviour
             this.collider = collider;
         }
     }
+
     public Collision CheckCollision(LayerMask layer,BoxCollider2D bc)
     {
         bool hit = false;
