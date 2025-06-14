@@ -20,4 +20,5 @@ public class InputManager
         movingEntityBehaviour.moveInput = moveAction.ReadValue<Vector2>();
         movingEntityBehaviour.dashInput = dashAction.WasPressedThisFrame();
     }
+
 }

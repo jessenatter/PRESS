@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D;
-using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
@@ -14,21 +13,9 @@ public class Manager : MonoBehaviour
     public Player player = new Player();
     CameraClass cameraClass = new CameraClass();
     public BoxClass boxClass = new BoxClass();
-    public LayerMask playerMask, enemyMask, boxMask, wallMask;
-    public int playerLayer, enemyLayer, boxLayer, wallLayer;
 
     void Awake()
     {
-        playerLayer = LayerMask.NameToLayer("Player");
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        boxLayer = LayerMask.NameToLayer("Box");
-        wallLayer = LayerMask.NameToLayer("Wall");
-
-        playerMask = LayerMask.GetMask("Player");
-        enemyMask = LayerMask.GetMask("Enemy");
-        boxMask = LayerMask.GetMask("Box");
-        wallMask = LayerMask.GetMask("Wall");
-
         Characters.Add(player);
 
         for(int i = 0; i < enemyCount; i++)
@@ -49,9 +36,6 @@ public class Manager : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current.rKey.wasPressedThisFrame)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
         foreach (Character _character in Characters)
             _character.Update();
 
@@ -90,7 +74,7 @@ public class BoxClass : BaseClass
     protected SpriteRenderer sr;
     protected Sprite sprite;
     protected BoxCollider2D bc;
-    public Rigidbody2D rb;
+    protected Rigidbody2D rb;
     protected Vector2 spawnPoint;
     public BoxBehaviour boxBehaviour;
 
@@ -112,7 +96,6 @@ public class BoxClass : BaseClass
         boxBehaviour.player = manager.player;
 
         gameObject.transform.position = spawnPoint;
-        gameObject.layer = manager.boxLayer;
 
         boxBehaviour.ClassStart();
     }

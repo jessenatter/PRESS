@@ -5,7 +5,7 @@ public class Character : BaseClass
     public GameObject gameObject;
     protected SpriteRenderer sr;
     protected Sprite sprite;
-    public BoxCollider2D bc;
+    protected BoxCollider2D bc;
     protected Rigidbody2D rb;
     protected float moveSpeed = 1f, deceleration = 0.05f, health = 100, maxSpeed = 3f;
     public MovingEntityBehaviour movingEntityBehaviour; //all the posible mechanics of a moving entity
@@ -25,6 +25,7 @@ public class Character : BaseClass
         bc = gameObject.GetComponent<BoxCollider2D>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         collisionBehaviour = new CollisionBehaviour();
+
         sr.sprite = sprite;
         movingEntityBehaviour.rb = rb;
 
@@ -52,17 +53,17 @@ public class Character : BaseClass
 
 public class Player : Character
 {
-    protected LayerMask enemyMask;
+    protected LayerMask enemylayer;
     public InputManager inputManager = new InputManager();
     public override void Start(Manager _manager)
     {
         name = "Player";
         sprite = Resources.Load<Sprite>("Sprites/Player");
+        enemylayer = LayerMask.NameToLayer("Enemy");
 
         base.Start(_manager);
 
-        enemyMask = manager.enemyMask;
-        gameObject.layer = manager.playerLayer;
+        gameObject.layer = LayerMask.NameToLayer("Player");
 
         if (movingEntityBehaviour != null)
         {
@@ -80,21 +81,20 @@ public class Player : Character
             inputManager.Update();
         }
 
-        //if (collisionBehaviour.CheckCollision(enemyMask, bc))
-        //{
+        if (collisionBehaviour.CheckCollision(enemylayer, bc))
+        {
             
-        //}
+        }
     }
 }
 
 public class Enemy : Character
 {
-    protected LayerMask boxMask;
-    bool attachedToBox;
-    float boxAttachSpeed = 0.2f,boxAttachCD = 15,boxAttachTimer;
+    protected LayerMask boxLayer;
 
     public override void Start(Manager _manager)
     {
+        boxLayer = LayerMask.NameToLayer("Box");
         name = "Enemy";
         sprite = Resources.Load<Sprite>("Sprites/Enemy");
         moveSpeed = 0.8f;
@@ -102,53 +102,26 @@ public class Enemy : Character
 
         base.Start(_manager);
 
-        boxMask = manager.boxMask;
-        gameObject.layer = manager.enemyLayer;
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         movingEntityBehaviour.moveSpeed = 3.5f;
-        boxAttachTimer = boxAttachCD;
     }
 
     public override void Update()
     {
         Vector2 playerEnemyVector = manager.player.gameObject.transform.position - gameObject.transform.position;
 
-        if (Mathf.Round(playerEnemyVector.magnitude) == 0 || attachedToBox)
+        if (Mathf.Round(playerEnemyVector.magnitude) == 0)
             movingEntityBehaviour.moveInput = Vector2.zero;
         else
             movingEntityBehaviour.moveInput = playerEnemyVector;
 
         base.Update();
 
-        if (collisionBehaviour.CheckCollision(boxMask, bc) && collisionBehaviour.CheckCollision(boxMask, manager.player.bc))
+        if (collisionBehaviour.CheckCollision(boxLayer, bc))
         {
-            if (manager.boxClass.rb.linearVelocity.magnitude > boxAttachSpeed)
-            {
-                if (!attachedToBox && boxAttachTimer == boxAttachCD)
-                    AttachedToBox(true);
-            }
-            else if (attachedToBox)
-                AttachedToBox(false);
-        }
-        else if (attachedToBox)
-            AttachedToBox(false);
 
-        if(!attachedToBox && boxAttachTimer != boxAttachCD)
-            boxAttachTimer++;
+        }
     }
 
-    void AttachedToBox(bool attached)
-    {
-        if(attached)
-        {
-            gameObject.transform.SetParent(manager.boxClass.gameObject.transform);
-            attachedToBox = true;
-            boxAttachTimer = 0;
-        }
-        else
-        {
-            gameObject.transform.SetParent(manager.player.gameObject.transform.parent);
-            attachedToBox = false;
-        }
-    }
 }
