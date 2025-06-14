@@ -86,30 +86,9 @@ public class MovingEntityBehaviour : MonoBehaviour
 
 public class CollisionBehaviour
 {
-    public struct Collision
+    public bool CheckCollision(LayerMask layer, BoxCollider2D bc)
     {
-        public bool hit;
-        public Collider2D collider;
-
-        public Collision(bool hit, Collider2D collider) //constructor allows us to make new collision instances
-        {
-            this.hit = hit;
-            this.collider = collider;
-        }
-    }
-
-    public Collision CheckCollision(LayerMask layer, BoxCollider2D bc)
-    {
-        bool hit = false;
-        Collider2D box = Physics2D.OverlapBox(bc.transform.position, bc.size * 1.1f, 0, layer); //fucking horrible time realizing i need to use a bitmask instead of a layer index smh
-
-        if (box != null)
-        {
-            hit = true;
-        }
-
-        Collision returnValue = new (hit, box);
-
-        return returnValue;
+        bool hit = Physics2D.BoxCast(bc.transform.position, bc.size * 1.1f,0,Vector2.down,0,layer);
+        return hit;
     }
 }
