@@ -11,6 +11,10 @@ public class BoxBehaviour : MonoBehaviour
 
     [Header("Launch Settings")]
     public float launchSpeed;
+    bool isLaunched;
+    Vector2 launchDirection;
+
+    bool isGrabbed;
 
     float defaultDamping;
 
@@ -30,8 +34,23 @@ public class BoxBehaviour : MonoBehaviour
 
     public virtual void ClassUpdate()
     {
+        DampingCheck();
+        GrabCheck();
         LaunchCheck();
         WallCheck();
+
+    }
+
+    void DampingCheck()
+    {
+        if (isGrabbed || isLaunched)
+        {
+            rb.linearDamping = 0;
+        }
+        else
+        {
+            rb.linearDamping = defaultDamping;
+        }
     }
 
     void LaunchCheck()
@@ -41,6 +60,7 @@ public class BoxBehaviour : MonoBehaviour
             if (player.movingEntityBehaviour.isDashing)
             {
                 player.movingEntityBehaviour.CancelDash();
+                CancelGrab();
                 Launch(LaunchDirection());
             }
         }
@@ -48,23 +68,59 @@ public class BoxBehaviour : MonoBehaviour
 
     void WallCheck()
     {
-        RaycastHit2D directionRay = Physics2D.Raycast(transform.position, rb.linearVelocity, 0.6f, wallMask);
+        RaycastHit2D directionRay = Physics2D.Raycast(transform.position, launchDirection, 0.6f, wallMask);
 
         if (directionRay.collider != null)
         {
-            CancelLaunch();
+            if (isLaunched)
+            {
+                Debug.Log("cancel launch");
+                CancelLaunch();
+            }
         }
+    }
+
+    void GrabCheck()
+    {
+        if (collisionBehaviour.CheckCollision(playerMask, bc).hit)
+        {
+            if (player.movingEntityBehaviour.isGrabbing)
+            {
+                isGrabbed = true;
+                transform.parent = playerTransform;
+                rb.bodyType = RigidbodyType2D.Kinematic;
+                rb.useFullKinematicContacts = true;
+                rb.linearDamping = 0;
+                rb.linearVelocity = player.gameObject.GetComponent<Rigidbody2D>().linearVelocity;
+            }
+        }
+
+        if (!player.movingEntityBehaviour.isGrabbing)
+        {
+            if (isGrabbed)
+            {
+                CancelGrab();
+            }
+        }
+    }
+
+    public void CancelGrab()
+    {
+        isGrabbed = false;
+        transform.parent = null;
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     void Launch(Vector2 dir)
     {
-        rb.linearDamping = 0;
+        isLaunched = true;
+        launchDirection = dir;
         rb.linearVelocity = dir * launchSpeed;
     }
 
     public void CancelLaunch()
     {
-        rb.linearDamping = defaultDamping;
+        isLaunched = false;
         rb.linearVelocity = Vector2.zero;
     }
 

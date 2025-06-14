@@ -9,7 +9,6 @@ public class MovingEntityBehaviour : MonoBehaviour
     public float moveSpeed = 7; //current move speed
 
     [Header ("Dash Settings")]
-
     [HideInInspector] public bool dashInput;
     [HideInInspector] public bool dashAble = true;
     [HideInInspector] public bool isDashing = false;
@@ -18,6 +17,9 @@ public class MovingEntityBehaviour : MonoBehaviour
     [HideInInspector] public float dashTime = 0; //current amount of time dash has been going on
     public float dashMaxCD = 120;
     [HideInInspector] public float dashCD = 0; //current amount of time dash has been on cooldown
+
+    [HideInInspector] public bool grabInput;
+    [HideInInspector] public bool isGrabbing;
 
     [HideInInspector] public Vector2 lastDir;
 
@@ -29,6 +31,7 @@ public class MovingEntityBehaviour : MonoBehaviour
             Move(moveInput);
         }
         Dash(dashInput);
+        Grab(grabInput);
         
     }
 
@@ -82,6 +85,11 @@ public class MovingEntityBehaviour : MonoBehaviour
 
         dashTime = 0;
         dashCD = dashMaxCD;
+    }
+
+    void Grab (bool grabInput)
+    {
+        isGrabbing = grabInput;
     }
 }
 
