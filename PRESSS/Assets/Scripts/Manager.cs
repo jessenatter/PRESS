@@ -6,16 +6,28 @@ using UnityEngine.U2D;
 
 public class Manager : MonoBehaviour
 {
-    List<Character> Characters = new List<Character>();
+    public List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
 
     int enemyCount = 1;
     public Player player = new Player();
     CameraClass cameraClass = new CameraClass();
     public BoxClass boxClass = new BoxClass();
+    public int playerLayer, boxLayer, enemyLayer, wallLayer;
+    public LayerMask playerMask, boxMask, enemyMask, wallMask;
 
     void Awake()
     {
+        playerLayer = LayerMask.NameToLayer("Player");
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        boxLayer = LayerMask.NameToLayer("Box");
+        wallLayer = LayerMask.NameToLayer("Wall");
+
+        playerMask = LayerMask.GetMask("Player");
+        enemyMask = LayerMask.GetMask("Enemy");
+        boxMask = LayerMask.GetMask("Box");
+        wallMask = LayerMask.GetMask("Wall");
+
         Characters.Add(player);
 
         for(int i = 0; i < enemyCount; i++)
@@ -36,8 +48,17 @@ public class Manager : MonoBehaviour
 
     void Update()
     {
-        foreach (Character _character in Characters)
-            _character.Update();
+        if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+
+        for (int i = Characters.Count - 1; i >= 0; i--)
+        {
+            Characters[i].Update();
+            if (Characters[i].dead)
+            {
+                Destroy(Characters[i].gameObject);
+                Characters.RemoveAt(i);
+            }
+        }
 
         cameraClass.Update();
         boxClass.Update();
@@ -74,7 +95,7 @@ public class BoxClass : BaseClass
     protected SpriteRenderer sr;
     protected Sprite sprite;
     protected BoxCollider2D bc;
-    protected Rigidbody2D rb;
+    public Rigidbody2D rb;
     protected Vector2 spawnPoint;
     public BoxBehaviour boxBehaviour;
 
@@ -96,6 +117,7 @@ public class BoxClass : BaseClass
         boxBehaviour.player = manager.player;
 
         gameObject.transform.position = spawnPoint;
+        gameObject.layer = manager.boxLayer;
 
         boxBehaviour.ClassStart();
     }

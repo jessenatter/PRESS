@@ -11,8 +11,8 @@ public class BoxBehaviour : MonoBehaviour
 
     [Header("Launch Settings")]
     public float launchSpeed;
-    bool isLaunched;
-    Vector2 launchDirection;
+    public bool isLaunched;
+    Vector2 launchDirection,launchVelocity;
 
     LayerMask playerMask;
     LayerMask wallMask;
@@ -38,7 +38,6 @@ public class BoxBehaviour : MonoBehaviour
         GrabCheck();
         LaunchCheck();
         WallCheck();
-
     }
 
     void DampingCheck()
@@ -64,6 +63,9 @@ public class BoxBehaviour : MonoBehaviour
                 Launch(LaunchDirection());
             }
         }
+
+        if (isLaunched)
+            rb.linearVelocity = launchVelocity;
     }
 
     void WallCheck()
@@ -73,8 +75,7 @@ public class BoxBehaviour : MonoBehaviour
         if (directionRay.collider != null)
         {
             if (isLaunched)
-            {
-                Debug.Log("cancel launch");
+            { 
                 CancelLaunch();
             }
         }
@@ -116,6 +117,7 @@ public class BoxBehaviour : MonoBehaviour
         isLaunched = true;
         launchDirection = dir;
         rb.linearVelocity = dir * launchSpeed;
+        launchVelocity = rb.linearVelocity;
     }
 
     public void CancelLaunch()
@@ -164,7 +166,7 @@ public class BoxBehaviour : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        if (collision.gameObject.layer == manager.wallMask)
         {
             CancelLaunch();
         }
