@@ -80,10 +80,10 @@ public class Player : Character
             inputManager.Update();
         }
 
-        //if (collisionBehaviour.CheckCollision(enemyMask, bc))
-        //{
+        /*if (collisionBehaviour.CheckCollision(enemylayer, bc).hit)
+        {
             
-        //}
+        }*/
     }
 }
 
