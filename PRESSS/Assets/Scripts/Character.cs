@@ -81,10 +81,10 @@ public class Player : Character
             inputManager.Update();
         }
 
-        if (collisionBehaviour.CheckCollision(enemylayer, bc))
+        /*if (collisionBehaviour.CheckCollision(enemylayer, bc).hit)
         {
             
-        }
+        }*/
     }
 }
 
@@ -118,10 +118,10 @@ public class Enemy : Character
 
         base.Update();
 
-        if (collisionBehaviour.CheckCollision(boxLayer, bc))
+        /*if (collisionBehaviour.CheckCollision(boxLayer, bc).hit)
         {
 
-        }
+        }*/
     }
 
 }
