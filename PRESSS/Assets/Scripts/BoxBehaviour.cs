@@ -14,6 +14,9 @@ public class BoxBehaviour : MonoBehaviour
     bool isLaunched;
     Vector2 launchDirection;
 
+    LayerMask playerMask;
+    LayerMask wallMask;
+
     bool isGrabbed;
 
     float defaultDamping;
@@ -24,6 +27,9 @@ public class BoxBehaviour : MonoBehaviour
     {
         playerTransform = player.gameObject.transform;
         defaultDamping = rb.linearDamping;
+
+        playerMask = LayerMask.GetMask("Player");
+        wallMask = LayerMask.GetMask("Wall");
     }
 
     public virtual void ClassUpdate()

@@ -95,9 +95,29 @@ public class MovingEntityBehaviour : MonoBehaviour
 
 public class CollisionBehaviour
 {
-    public bool CheckCollision(LayerMask layer,BoxCollider2D bc)
+    public struct Collision
     {
-        bool hit = Physics2D.BoxCast(bc.transform.position, bc.size, layer, Vector2.zero);
-        return hit;
+        public bool hit;
+        public Collider2D collider;
+
+        public Collision (bool hit, Collider2D collider)
+        {
+            this.hit = hit;
+            this.collider = collider;
+        }
+    }
+    public Collision CheckCollision(LayerMask layer,BoxCollider2D bc)
+    {
+        bool hit = false;
+        Collider2D box = Physics2D.OverlapBox(bc.transform.position, bc.size, 0, layer);
+
+        if (box != null)
+        {
+            hit = true;
+        }
+
+        Collision returnValue = new Collision(hit, box);
+
+        return returnValue;
     }
 }
