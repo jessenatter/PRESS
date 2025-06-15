@@ -138,7 +138,7 @@ public class BoxClass : BaseClass
     protected Vector2 spawnPoint;
     public BoxBehaviour boxBehaviour;
     protected CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
-    bool hasHitWall;
+    //bool hasHitWall;
 
     public override void Start(Manager _manager)
     {
@@ -167,7 +167,9 @@ public class BoxClass : BaseClass
     {
         boxBehaviour.ClassUpdate();
 
-        if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
+        //there is already a wall check this is redundant
+
+        /*if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
         {
             if (!hasHitWall)
             {
@@ -176,7 +178,7 @@ public class BoxClass : BaseClass
             }
         }
         else
-            hasHitWall = false;
+            hasHitWall = false;*/
 
     }
 }

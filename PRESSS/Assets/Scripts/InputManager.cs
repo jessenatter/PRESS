@@ -10,6 +10,8 @@ public class InputManager
     InputAction dashAction;
     InputAction grabAction;
 
+    bool dashInputRecieved;
+
     public virtual void Start()
     {
         moveAction = InputSystem.actions.FindAction("Move");
@@ -19,8 +21,27 @@ public class InputManager
 
     public virtual void Update()
     {
+        Debug.Log(dashAction.WasPressedThisFrame());
+
         movingEntityBehaviour.moveInput = moveAction.ReadValue<Vector2>();
-        movingEntityBehaviour.dashInput = dashAction.WasPressedThisFrame();
+
+        if (movingEntityBehaviour.dashInput) // if dash input is true set it to false
+        {
+            movingEntityBehaviour.dashInput = false;
+        }
+
+        if (dashAction.IsPressed() && !dashInputRecieved) // if the dash action is pressed and the dash input has not been recieved already, set the dash input to true
+        {
+            dashInputRecieved = true;
+            movingEntityBehaviour.dashInput = true;
+        }
+
+        if (!dashAction.IsPressed() && dashInputRecieved) // when dash action is not pressed set the dash input recieved to false
+        {
+            dashInputRecieved = false;
+        }
+
+        //movingEntityBehaviour.dashInput = dashAction.IsPressed();
         movingEntityBehaviour.grabInput = grabAction.IsPressed();
     }
 

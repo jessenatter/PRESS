@@ -12,8 +12,8 @@ public class MovingEntityBehaviour : MonoBehaviour
     [HideInInspector] public bool dashInput;
     [HideInInspector] public bool dashAble = true;
     [HideInInspector] public bool isDashing = false;
-    public float dashSpeed = 20;
-    public float dashMaxTime = 100;
+    public float dashSpeed = 30;
+    public float dashMaxTime = 20;
     [HideInInspector] public float dashTime = 0; //current amount of time dash has been going on
     public float dashMaxCD = 120;
     [HideInInspector] public float dashCD = 0; //current amount of time dash has been on cooldown
@@ -23,7 +23,7 @@ public class MovingEntityBehaviour : MonoBehaviour
 
     [HideInInspector] public Vector2 lastDir;
 
-    public virtual void ClassUpdate() //called in character class
+    public virtual void ClassUpdate() //called in character base class
     {
         DirectionHandler();
         if (!isDashing)
@@ -50,11 +50,13 @@ public class MovingEntityBehaviour : MonoBehaviour
 
     void Dash(bool dashInput)
     {
+        Debug.Log("DASH INPUT: " + dashInput.ToString() + "DASH ABLE: " + dashAble.ToString() + "IS DASHING: " + isDashing.ToString());
+
         if (dashCD > 0)
         {
             dashCD--;
         }
-        else
+        else if (!dashAble)
         {
             dashAble = true;
         }
@@ -65,9 +67,7 @@ public class MovingEntityBehaviour : MonoBehaviour
         }
         else if (isDashing)
         {
-            isDashing = false;
-            dashAble = false;
-            dashCD = dashMaxCD;
+            CancelDash();
         }
 
         if (dashInput && dashAble && !isDashing)
@@ -81,7 +81,8 @@ public class MovingEntityBehaviour : MonoBehaviour
     public void CancelDash()
     {
         isDashing = false;
-        dashAble = true;
+
+        rb.linearVelocity = Vector2.zero;
 
         dashTime = 0;
         dashCD = dashMaxCD;

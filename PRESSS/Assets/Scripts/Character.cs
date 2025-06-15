@@ -86,8 +86,8 @@ public class Player : Character
             
         }
 
-        if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
-            movingEntityBehaviour.CancelDash();
+        /*if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
+            movingEntityBehaviour.CancelDash();*/
     }
 }
 
@@ -95,7 +95,7 @@ public class Enemy : Character
 {
     bool attachedToBox;
     
-    float squishSpeed = 0.001f;
+    float squishSpeed = 0.01f;
 
     public override void Start(Manager _manager)
     {
@@ -146,7 +146,7 @@ public class Enemy : Character
 
     void AttachBoxCheck()
     {
-        RaycastHit2D checkRay = Physics2D.BoxCast(
+        RaycastHit2D checkRay = Physics2D.BoxCast( //the ray that checks if the player is moving towards the enemy (the ray comes from the box)
             origin : manager.boxClass.gameObject.transform.position, 
             size : manager.boxClass.bc.size,
             angle : 0,
@@ -154,8 +154,8 @@ public class Enemy : Character
             distance : 0.1f, 
             layerMask : manager.enemyMask);
 
-        CollisionBehaviour.Collision playerBoxCollision = collisionBehaviour.CheckCollision(manager.boxMask, manager.player.bc);
-        CollisionBehaviour.Collision enemyBoxCollision = collisionBehaviour.CheckCollision(manager.boxMask, bc);
+        CollisionBehaviour.Collision playerBoxCollision = collisionBehaviour.CheckCollision(manager.boxMask, manager.player.bc); //checks if the player is colliding with the box
+        CollisionBehaviour.Collision enemyBoxCollision = collisionBehaviour.CheckCollision(manager.boxMask, bc); // checks if the enemy is colliding with the box
 
         if ((checkRay.collider == bc && playerBoxCollision.hit) || (manager.boxClass.boxBehaviour.isLaunched && enemyBoxCollision.hit))
         {
@@ -172,11 +172,13 @@ public class Enemy : Character
         if(attached)
         {
             gameObject.transform.SetParent(manager.boxClass.gameObject.transform);
+            rb.simulated = false;
             attachedToBox = true;
         }
         else
         {
             gameObject.transform.SetParent(manager.player.gameObject.transform.parent);
+            rb.simulated = true;
             attachedToBox = false;
         }
     }
@@ -194,8 +196,6 @@ public class Enemy : Character
         {
             return Vector2.right;
         }
-
-        return Vector2.zero;
     }
 
     protected override void Die()
