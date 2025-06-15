@@ -30,6 +30,8 @@ public class Character : BaseClass
 
         sr.sprite = sprite;
         movingEntityBehaviour.rb = rb;
+        movingEntityBehaviour.bc = bc;
+        movingEntityBehaviour.manager = manager;
 
         gameObject.transform.position = spawnPoint;
     }
@@ -172,8 +174,12 @@ public class Enemy : Character
         if(attached)
         {
             gameObject.transform.SetParent(manager.boxClass.gameObject.transform);
-            rb.simulated = false;
             attachedToBox = true;
+
+            if (manager.boxClass.boxBehaviour.isLaunched)
+            {
+                rb.simulated = false;
+            }
         }
         else
         {

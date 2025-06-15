@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class MovingEntityBehaviour : MonoBehaviour
 {
+    [HideInInspector] public Manager manager;
+
     [HideInInspector] public Rigidbody2D rb;
+    [HideInInspector] public BoxCollider2D bc;
 
     [Header ("Move Settings")]
     [HideInInspector] public Vector2 moveInput;
@@ -23,6 +26,8 @@ public class MovingEntityBehaviour : MonoBehaviour
 
     [HideInInspector] public Vector2 lastDir;
 
+    [HideInInspector] public CollisionBehaviour cb = new CollisionBehaviour();
+
     public virtual void ClassUpdate() //called in character base class
     {
         DirectionHandler();
@@ -32,6 +37,8 @@ public class MovingEntityBehaviour : MonoBehaviour
         }
         Dash(dashInput);
         Grab(grabInput);
+
+        WallCheck();
         
     }
 
@@ -50,7 +57,7 @@ public class MovingEntityBehaviour : MonoBehaviour
 
     void Dash(bool dashInput)
     {
-        Debug.Log("DASH INPUT: " + dashInput.ToString() + "DASH ABLE: " + dashAble.ToString() + "IS DASHING: " + isDashing.ToString());
+        //Debug.Log("DASH INPUT: " + dashInput.ToString() + "DASH ABLE: " + dashAble.ToString() + "IS DASHING: " + isDashing.ToString());
 
         if (dashCD > 0)
         {
@@ -91,6 +98,18 @@ public class MovingEntityBehaviour : MonoBehaviour
     void Grab (bool grabInput)
     {
         isGrabbing = grabInput;
+    }
+
+    void WallCheck()
+    {
+        if (cb.CheckCollision(manager.wallMask, bc).hit)
+        {
+            RaycastHit2D wallDashRay = Physics2D.Raycast(transform.position, lastDir, 1, manager.wallMask);
+            if (isDashing && wallDashRay.collider != null) //checks to see if the object is dashing into the wall
+            {
+                CancelDash();
+            }
+        }
     }
 }
 
