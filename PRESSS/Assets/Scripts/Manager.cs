@@ -9,12 +9,14 @@ public class Manager : MonoBehaviour
     public List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
 
-    int enemyCount = 3;
+    int enemyCount = 1;
     public Player player = new Player();
-    CameraClass cameraClass = new CameraClass();
+    public CameraClass cameraClass = new CameraClass();
     public BoxClass boxClass = new BoxClass();
     public int playerLayer, boxLayer, enemyLayer, wallLayer;
     public LayerMask playerMask, boxMask, enemyMask, wallMask;
+    public bool hitStop = false;
+    float hitStopDuration = 15, hitStopTimer;
 
     void Awake()
     {
@@ -46,10 +48,26 @@ public class Manager : MonoBehaviour
             _baseClass.Start(this);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 
+        if (hitStop == false)
+            UpdateEverything();
+        else
+        {
+            if (hitStopTimer != hitStopDuration)
+                hitStopTimer++;
+            else
+            {
+                hitStop = false;
+                hitStopTimer = 0;
+            }
+        }
+    }
+
+    void UpdateEverything()
+    {
         for (int i = Characters.Count - 1; i >= 0; i--)
         {
             Characters[i].Update();
@@ -76,16 +94,37 @@ public class BaseClass
 public class CameraClass : BaseClass
 {
     GameObject gameObject;
+    public bool screenshake;
+    float screenShakeTimer, screenshakeDuration = 15, shakeFrequency = 4, shakeMagnitude = 0.1f;
+    protected Vector3 initPos;
 
     public override void Start(Manager _manager)
     {
         gameObject = GameObject.FindGameObjectWithTag("MainCamera");
         base.Start(_manager);
+        initPos = gameObject.transform.position;
     }
 
     public override void Update()
     {
         base.Update();
+
+        if(screenshake)
+        {
+            float shake = Mathf.Sin(screenShakeTimer * shakeFrequency) * shakeMagnitude;
+            gameObject.transform.position = new Vector3(initPos.x + shake, initPos.y + shake,initPos.z + shake);
+
+            screenShakeTimer++;
+            if (screenShakeTimer == screenshakeDuration)
+            {
+                screenshake = false;
+                screenShakeTimer = 0;
+            }
+        }
+        else
+        {
+            gameObject.transform.position = initPos;
+        }
     }
 }
 
@@ -98,6 +137,8 @@ public class BoxClass : BaseClass
     public Rigidbody2D rb;
     protected Vector2 spawnPoint;
     public BoxBehaviour boxBehaviour;
+    protected CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
+    bool hasHitWall;
 
     public override void Start(Manager _manager)
     {
@@ -125,5 +166,17 @@ public class BoxClass : BaseClass
     public override void Update()
     {
         boxBehaviour.ClassUpdate();
+
+        if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
+        {
+            if (!hasHitWall)
+            {
+                manager.cameraClass.screenshake = true;
+                hasHitWall = true;
+            }
+        }
+        else
+            hasHitWall = false;
+
     }
 }

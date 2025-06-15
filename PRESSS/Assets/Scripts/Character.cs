@@ -85,13 +85,16 @@ public class Player : Character
         {
             
         }
+
+        if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
+            movingEntityBehaviour.CancelDash();
     }
 }
 
 public class Enemy : Character
 {
     bool attachedToBox;
-    //protected float attachToBoxMinSpeed = 0.2f, attachToBoxMinForce = 0.2f;
+    
     float squishSpeed = 0.001f;
 
     public override void Start(Manager _manager)
@@ -122,22 +125,6 @@ public class Enemy : Character
 
         if (collisionBehaviour.CheckCollision(manager.boxMask, bc).hit)
         {
-            /*if (manager.boxClass.rb.linearVelocity.magnitude > attachToBoxMinSpeed)
-            {
-                if (!attachedToBox)
-                    SetAttachedToBox(true);
-            }
-            else if(attachedToBox)
-                SetAttachedToBox(false);
-
-            if(manager.boxClass.rb.totalForce.magnitude > attachToBoxMinForce)
-            {
-                if (!attachedToBox)
-                    SetAttachedToBox(true);
-            }*/
-
-            
-
             if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
             {
                 if(manager.boxClass.boxBehaviour.isLaunched)
@@ -208,32 +195,15 @@ public class Enemy : Character
             return Vector2.right;
         }
 
-        /*RaycastHit2D downRay = Physics2D.BoxCast(gameObject.transform.position, bc.size * 0.9f, 0, Vector2.down, 0.1f, manager.boxMask);
-        RaycastHit2D upRay = Physics2D.BoxCast(gameObject.transform.position, bc.size * 0.9f, 0, Vector2.up, 0.1f, manager.boxMask);
-        RaycastHit2D leftRay = Physics2D.BoxCast(gameObject.transform.position, bc.size * 0.9f, 0, Vector2.left, 0.1f, manager.boxMask);
-        RaycastHit2D rightRay = Physics2D.BoxCast(gameObject.transform.position, bc.size * 0.9f, 0, Vector2.right, 0.1f, manager.boxMask);
-
-        if (downRay.collider != null || upRay.collider != null)
-        {
-            return Vector2.up;
-        }
-
-        if (leftRay.collider != null || rightRay.collider != null)
-        {
-            return Vector2.right;
-        }*/
-
-        /*if (Mathf.Abs(boxTransform.position.x - gameObject.transform.position.x) < (bc.size.x / 2 + boxTransform.gameObject.GetComponent<BoxCollider2D>().size.x / 2))
-        {
-            return Vector2.right;
-        }
-
-        if (Mathf.Abs(boxTransform.position.y - gameObject.transform.position.y) < (bc.size.y / 2 + boxTransform.gameObject.GetComponent<BoxCollider2D>().size.y / 2))
-        {
-            return Vector2.up;
-        }*/
-
         return Vector2.zero;
     }
 
+    protected override void Die()
+    {
+        base.Die();
+
+        GameObject blood = Object.Instantiate(Resources.Load<GameObject>("Prefab/BloodParticles"));
+        blood.transform.position = gameObject.transform.position;
+        manager.cameraClass.screenshake = true;
+    }
 }
