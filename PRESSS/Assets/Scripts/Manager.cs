@@ -95,7 +95,7 @@ public class CameraClass : BaseClass
 {
     GameObject gameObject;
     public bool screenshake;
-    float screenShakeTimer, screenshakeDuration = 15, shakeFrequency = 4, shakeMagnitude = 0.1f;
+    float screenShakeTimer, screenshakeDuration = 20, shakeFrequency = 1, shakeMagnitude = 0.1f;
     protected Vector3 initPos;
 
     public override void Start(Manager _manager)
@@ -112,7 +112,7 @@ public class CameraClass : BaseClass
         if(screenshake)
         {
             float shake = Mathf.Sin(screenShakeTimer * shakeFrequency) * shakeMagnitude;
-            gameObject.transform.position = new Vector3(initPos.x + shake, initPos.y + shake,initPos.z + shake);
+            gameObject.transform.position = new Vector3(initPos.x + shake, initPos.y + shake,initPos.z);
 
             screenShakeTimer++;
             if (screenShakeTimer == screenshakeDuration)
