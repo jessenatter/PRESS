@@ -35,6 +35,10 @@ public class WaveManager : BaseClass
         base.Start(_manager);
         waveUI = manager.waveUI;
         scoreUI = manager.scoreUI;
+
+        //load saved wave and score
+        wave = GameDataManager.savedWave;
+        manager.score = GameDataManager.savedScore;
     }
 
     public override void Update()
@@ -55,6 +59,7 @@ public class WaveManager : BaseClass
         waveUI.enabled = true;
         wave += 1;
         waveUI.text = "WAVE: " + wave.ToString();
+        GameDataManager.savedWave = wave;
         enemyCount = Mathf.RoundToInt(wave * Random.Range(1, 1.75f));
         currentEnemyCount = enemyCount;
 
