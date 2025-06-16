@@ -87,9 +87,6 @@ public class Player : Character
         {
             
         }
-
-        /*if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
-            movingEntityBehaviour.CancelDash();*/
     }
 }
 
@@ -104,7 +101,6 @@ public class Enemy : Character
     {
         name = "Enemy";
         sprite = Resources.Load<Sprite>("Sprites/ghost");
-        spawnPoint = new Vector2(2, 2);
 
         base.Start(_manager);
 

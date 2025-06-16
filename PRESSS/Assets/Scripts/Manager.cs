@@ -10,20 +10,17 @@ public class Manager : MonoBehaviour
     public List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
 
-    int enemyCount = 1;
     public Player player = new Player();
     public CameraClass cameraClass = new CameraClass();
     public BoxClass boxClass = new BoxClass();
-    public int playerLayer, boxLayer, enemyLayer, wallLayer, score;
-    public LayerMask playerMask, boxMask, enemyMask, wallMask;
+    public WaveManager waveManager = new WaveManager();
+    [HideInInspector] public int playerLayer, boxLayer, enemyLayer, wallLayer, score;
+    [HideInInspector] public LayerMask playerMask, boxMask, enemyMask, wallMask;
+
     public bool hitStop = false;
-    float hitStopDuration = 15, hitStopTimer,waveStartDuration = 100,waveStartTimer;
+    float hitStopDuration = 15, hitStopTimer;
 
-    bool WaveLoaded = false,StartedToLoadWave = false;
-    int wave;
-
-    [SerializeField] protected TextMeshProUGUI scoreUI, waveUI;
-    Vector2 enemySpawnPoint = new Vector2(-7.5f, 2.5f);
+    public TextMeshProUGUI scoreUI, waveUI;
 
     void Awake()
     {
@@ -44,6 +41,7 @@ public class Manager : MonoBehaviour
 
         BaseClasses.Add(cameraClass);
         BaseClasses.Add(boxClass);
+        BaseClasses.Add(waveManager);
 
         foreach (BaseClass _baseClass in BaseClasses)
             _baseClass.Start(this);
@@ -51,10 +49,7 @@ public class Manager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-
-        if (!WaveLoaded)
-            LoadNextWave();
+        if (Keyboard.current.rKey.IsPressed()) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 
         Gameplay();
     }
@@ -77,79 +72,24 @@ public class Manager : MonoBehaviour
         scoreUI.text = "SCORE: " + score.ToString();
     }
 
-    void LoadNextWave()
-    {
-        if(!StartedToLoadWave)
-        {
-            //activate UI 
-            waveUI.enabled = true;
-            wave += 1;
-            waveUI.text = "WAVE: " + wave.ToString();
-            StartedToLoadWave = true;
-            enemyCount = Mathf.RoundToInt(wave * Random.Range(1,1.75f));
-        }
-        else
-        {
-            //wait a bit and then spawn enemies
-            waveStartTimer++;
-            if(waveStartTimer == waveStartDuration)
-            {
-                WaveLoaded = true;
-                waveStartTimer = 0;
-
-                int leftSideSpawns = 0, rightSideSpawns = 0;
-                float yPos = 0;
-
-                for (int i = 0; i < enemyCount; i++)
-                {
-                    Enemy enemy = new Enemy();
-                    int spawnSide = Random.value < 0.5f ? 1 : -1;
-
-                    if(spawnSide == 1)
-                    {
-                        yPos = enemySpawnPoint.y - (2 * leftSideSpawns);
-                        leftSideSpawns++;
-                    }
-                    else
-                    {
-                        yPos = enemySpawnPoint.y - (2 * rightSideSpawns);
-                        rightSideSpawns++;
-                    }
-
-                    enemy.spawnPoint = new Vector2(enemySpawnPoint.x * spawnSide,yPos);
-                    Characters.Add(enemy);
-                    enemy.Start(this);
-                    waveUI.enabled = false;
-                }
-            }
-        }
-    }
-
     void UpdateEverything()
     {
-        int currentEnemyCount = 0;
-
         for (int i = Characters.Count - 1; i >= 0; i--)
         {
-            if (Characters[i] is Enemy)
-                currentEnemyCount++;
-
             Characters[i].Update();
             if (Characters[i].dead)
             {
+                if (Characters[i] is Enemy)
+                    waveManager.currentEnemyCount--;
+
                 Destroy(Characters[i].gameObject);
                 Characters.RemoveAt(i);
             }
         }
 
-        if (currentEnemyCount == 0 && WaveLoaded)
-        {
-            WaveLoaded = false;
-            StartedToLoadWave = false;
-        }
-
         cameraClass.Update();
         boxClass.Update();
+        waveManager.Update();
     }
 }
 
