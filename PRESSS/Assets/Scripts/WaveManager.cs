@@ -72,7 +72,7 @@ public class WaveManager : BaseClass
 
     void SpawnWave()
     {
-        Debug.Log("SPAWN DELAY TIMER: " + spawnDelay_t.ToString() + " " + "IN BETWEEN TIMER: " + inBetweenWaveTime_t.ToString());
+        //Debug.Log("SPAWN DELAY TIMER: " + spawnDelay_t.ToString() + " " + "IN BETWEEN TIMER: " + inBetweenWaveTime_t.ToString());
 
         if (!startedWaveLoad)
         {

@@ -106,6 +106,7 @@ public class CameraClass : BaseClass
     GameObject gameObject;
     public bool screenshake;
     float screenShakeTimer, screenshakeDuration = 20, shakeFrequency = 1, shakeMagnitude = 0.1f;
+    public Vector2 screenShakeDir; // more like axis
     protected Vector3 initPos;
 
     public override void Start(Manager _manager)
@@ -119,10 +120,12 @@ public class CameraClass : BaseClass
     {
         base.Update();
 
+        IdleMovement();
+
         if(screenshake)
         {
             float shake = Mathf.Sin(screenShakeTimer * shakeFrequency) * shakeMagnitude;
-            gameObject.transform.position = new Vector3(initPos.x + shake, initPos.y + shake,initPos.z);
+            gameObject.transform.position = new Vector3(initPos.x + shake * screenShakeDir.x, initPos.y + shake * screenShakeDir.y, initPos.z);
 
             screenShakeTimer++;
             if (screenShakeTimer == screenshakeDuration)
@@ -135,6 +138,22 @@ public class CameraClass : BaseClass
         {
             gameObject.transform.position = initPos;
         }
+    }
+
+    public void Screenshake(Vector2 direction, float magnitude, float duration, float frequency)
+    {
+        screenshake = true;
+        screenShakeDir = direction;
+        shakeMagnitude = magnitude;
+        screenshakeDuration = duration;
+        shakeFrequency = frequency;
+    }
+
+    void IdleMovement()
+    {
+        float xRotate = Mathf.Sin(Time.time);
+        float yRotate = Mathf.Cos(Time.time);
+        gameObject.transform.Rotate(new Vector3(xRotate * 0.01f, yRotate * 0.01f, 0));
     }
 }
 
