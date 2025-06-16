@@ -75,6 +75,8 @@ public class Manager : MonoBehaviour
         }
 
         scoreUI.text = "SCORE: " + score.ToString();
+        GameDataManager.savedScore = score;
+        GameDataManager.SaveToDisk();
     }
 
     void UpdateEverything()
