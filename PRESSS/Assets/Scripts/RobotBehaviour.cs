@@ -11,21 +11,27 @@ public class RobotBehaviour : MonoBehaviour
 
     CollisionBehaviour cb = new();
 
-    public int maxChargeAmount = 1200;
-    public int chargeAmount = 600;
+    public float maxChargeAmount = 1200;
+    public float chargeAmount = 600;
 
     bool isGrabbed;
+
+    GameObject charge;
+    float chargeYinitScale;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void ClassStart()
     {
-        
+        charge = gameObject.transform.Find("Charge").gameObject;
+        chargeYinitScale = charge.transform.localScale.y;
     }
 
     // Update is called once per frame
     public void ClassUpdate()
     {
-        Debug.Log("CHARGE AMOUNT: " + chargeAmount.ToString());
+        float chargeOutOf1 = chargeAmount / maxChargeAmount;
+        charge.gameObject.transform.localScale = new Vector2(charge.transform.localScale.x, chargeYinitScale * chargeOutOf1);
+
         TakeDamage();
         GrabCheck();
     }
@@ -35,12 +41,12 @@ public class RobotBehaviour : MonoBehaviour
         if (chargeAmount + addedCharge < maxChargeAmount)
         {
             chargeAmount += addedCharge;
+            //spark
         }
         else
         {
             chargeAmount = maxChargeAmount;
         }
-        
     }
 
     void GrabCheck()
@@ -78,6 +84,9 @@ public class RobotBehaviour : MonoBehaviour
 
         if (collision.hit)
         {
+            GameObject sparks = Object.Instantiate(Resources.Load<GameObject>("Prefab/RobotParticles"));
+            sparks.transform.position = gameObject.transform.position;
+
             if (chargeAmount > collision.collider.gameObject.GetComponent<MovingEntityBehaviour>().enemy.damage) // get the enemy's damage
             {
                 chargeAmount -= collision.collider.gameObject.GetComponent<MovingEntityBehaviour>().enemy.damage;
@@ -93,5 +102,11 @@ public class RobotBehaviour : MonoBehaviour
     void Die()
     {
         Debug.Log("DIE");
+
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject sparks = Object.Instantiate(Resources.Load<GameObject>("Prefab/RobotParticles"));
+            sparks.transform.position = gameObject.transform.position;
+        }
     }
 }
