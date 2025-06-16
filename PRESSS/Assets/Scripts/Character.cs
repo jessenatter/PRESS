@@ -61,7 +61,7 @@ public class Player : Character
     public override void Start(Manager _manager)
     {
         name = "Player";
-        sprite = Resources.Load<Sprite>("Sprites/Player");
+        sprite = Resources.Load<Sprite>("Sprites/Player/ghost_girl_front");
 
         base.Start(_manager);
 
@@ -103,7 +103,7 @@ public class Enemy : Character
     public override void Start(Manager _manager)
     {
         name = "Enemy";
-        sprite = Resources.Load<Sprite>("Sprites/Enemy");
+        sprite = Resources.Load<Sprite>("Sprites/ghost");
         spawnPoint = new Vector2(2, 2);
 
         base.Start(_manager);
@@ -124,6 +124,7 @@ public class Enemy : Character
 
         base.Update();
 
+        FlipSprite();
         AttachBoxCheck();
 
         if (collisionBehaviour.CheckCollision(manager.boxMask, bc).hit)
@@ -144,6 +145,18 @@ public class Enemy : Character
         if (gameObject.transform.localScale.magnitude <= 1.05f)
         {
             Die();
+        }
+    }
+
+    void FlipSprite()
+    {
+        if (movingEntityBehaviour.moveInput.x > 0)
+        {
+            sr.flipX = true;
+        }
+        else
+        {
+            sr.flipX = false;
         }
     }
 
