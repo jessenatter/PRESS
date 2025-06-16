@@ -9,6 +9,8 @@ public class Manager : MonoBehaviour
 {
     public List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
+    List<Rigidbody2D> rbs = new List<Rigidbody2D>();
+    List<Vector2> storedVelocities = new List<Vector2>();
 
     public Player player = new Player();
     public CameraClass cameraClass = new CameraClass();
