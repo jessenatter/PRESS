@@ -10,7 +10,7 @@ public class Character : BaseClass
     protected Rigidbody2D rb;
     protected float health = 100;
     public MovingEntityBehaviour movingEntityBehaviour; //all the posible mechanics of a moving entity
-    protected Vector2 moveVec, spawnPoint;
+    public Vector2 moveVec, spawnPoint;
     public CollisionBehaviour collisionBehaviour;
     public bool dead;
 
@@ -98,6 +98,7 @@ public class Enemy : Character
     bool attachedToBox;
     
     float squishSpeed = 0.01f;
+    int scoreValue = 100;
 
     public override void Start(Manager _manager)
     {
@@ -211,5 +212,6 @@ public class Enemy : Character
         GameObject blood = Object.Instantiate(Resources.Load<GameObject>("Prefab/BloodParticles"));
         blood.transform.position = gameObject.transform.position;
         manager.cameraClass.screenshake = true;
+        manager.score += scoreValue;
     }
 }

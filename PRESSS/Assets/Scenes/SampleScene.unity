@@ -127,9 +127,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 34750232062686657, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_Creator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 914383309102626521, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032773823511726870, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_Creator
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2551196067271832973, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
       propertyPath: m_Name
       value: Level
+      objectReference: {fileID: 0}
+    - target: {fileID: 4058686198324175734, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_margin.x
+      value: 34.297523
+      objectReference: {fileID: 0}
+    - target: {fileID: 4058686198324175734, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_margin.z
+      value: -394.47522
+      objectReference: {fileID: 0}
+    - target: {fileID: 4183461269337482370, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_Creator
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4393973109453784005, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -180,6 +204,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5809044922728794668, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_Creator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035321331019532804, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_Creator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7097772231477037488, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_Creator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7409062942724803252, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8560496313726033052, guid: b0fb2814a308044e4a9ad7898082c7ac, type: 3}
       propertyPath: m_Creator
       value: 
       objectReference: {fileID: 0}

@@ -21,7 +21,7 @@ public class InputManager
 
     public virtual void Update()
     {
-        Debug.Log(dashAction.WasPressedThisFrame());
+        //Debug.Log(dashAction.WasPressedThisFrame());
 
         movingEntityBehaviour.moveInput = moveAction.ReadValue<Vector2>();
 

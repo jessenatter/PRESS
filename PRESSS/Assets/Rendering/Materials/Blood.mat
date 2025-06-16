@@ -79,7 +79,7 @@ Material:
     - _Rotation: 0
     - _ZWrite: 0
     m_Colors:
-    - _BloodColor: {r: 2.9960787, g: 2.9960787, b: 2.9960787, a: 1}
+    - _BloodColor: {r: 5.9921575, g: 5.9921575, b: 5.9921575, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Tint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

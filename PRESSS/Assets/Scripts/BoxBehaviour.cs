@@ -77,6 +77,8 @@ public class BoxBehaviour : MonoBehaviour
             if (isLaunched)
             {
                 manager.cameraClass.screenshake = true;
+                GameObject boxParticles = Object.Instantiate(Resources.Load<GameObject>("Prefab/BoxParticles"));
+                boxParticles.transform.position = gameObject.transform.position;
                 CancelLaunch();
             }
         }
