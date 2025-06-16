@@ -151,9 +151,9 @@ public class CameraClass : BaseClass
 
     void IdleMovement()
     {
-        float xRotate = Mathf.Sin(Time.time);
+        float xRotate = Mathf.Sin(Time.time) * 0.5f;
         float yRotate = Mathf.Cos(Time.time);
-        gameObject.transform.Rotate(new Vector3(xRotate * 0.01f, yRotate * 0.01f, 0));
+        gameObject.transform.Rotate(new Vector3(xRotate * 0.005f, yRotate * 0.005f, 0));
     }
 }
 
