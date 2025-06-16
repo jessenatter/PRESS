@@ -10,7 +10,7 @@ public class Character : BaseClass
     protected Rigidbody2D rb;
     protected float health = 100;
     public MovingEntityBehaviour movingEntityBehaviour; //all the posible mechanics of a moving entity
-    public Vector2 moveVec, spawnPoint;
+    public Vector2 moveVec, spawnPoint = new Vector2(-2, 0);
     public CollisionBehaviour collisionBehaviour;
     public bool dead;
 
@@ -49,7 +49,7 @@ public class Character : BaseClass
             Die();
     }
 
-    protected virtual void Die()
+    public virtual void Die()
     {
         dead = true;
     }
@@ -97,6 +97,9 @@ public class Enemy : Character
     float squishSpeed = 0.01f;
     int scoreValue = 100;
 
+    public int damage = 100;
+    public GameObject target;
+
     public override void Start(Manager _manager)
     {
         name = "Enemy";
@@ -105,19 +108,22 @@ public class Enemy : Character
         base.Start(_manager);
 
         gameObject.layer = manager.enemyLayer;
+        target = manager.robotClass.gameObject;
 
-        movingEntityBehaviour.moveSpeed = 2.5f;
+        movingEntityBehaviour.moveSpeed = 1f;
+        movingEntityBehaviour.enemy = this;
+
         sr.material = Resources.Load<Material>("Materials/Ghost");
     }
 
     public override void Update()
     {
-        Vector2 playerEnemyVector = manager.player.gameObject.transform.position - gameObject.transform.position;
+        Vector2 moveVector = target.transform.position - gameObject.transform.position;
 
-        if (Mathf.Round(playerEnemyVector.magnitude) == 0 || attachedToBox)
+        if (Mathf.Round(moveVector.magnitude) == 0 || attachedToBox)
             movingEntityBehaviour.moveInput = Vector2.zero;
         else
-            movingEntityBehaviour.moveInput = playerEnemyVector;
+            movingEntityBehaviour.moveInput = moveVector;
 
         base.Update();
 
@@ -128,9 +134,13 @@ public class Enemy : Character
         {
             if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
             {
-                if(manager.boxClass.boxBehaviour.isLaunched)
+                if (manager.boxClass.boxBehaviour.isLaunched)
+                {
+                    manager.score += scoreValue;
+                    manager.robotClass.robotBehaviour.Charge(scoreValue);
                     Die();
-                else if(attachedToBox)
+                }
+                else if (attachedToBox)
                 {
                     float scaleX = Mathf.Clamp(gameObject.transform.localScale.x - SquishDirection().x * squishSpeed, 0, Mathf.Infinity);
                     float scaleY = Mathf.Clamp(gameObject.transform.localScale.y - SquishDirection().y * squishSpeed, 0, Mathf.Infinity);
@@ -141,6 +151,8 @@ public class Enemy : Character
 
         if (gameObject.transform.localScale.magnitude <= 1.05f)
         {
+            manager.score += scoreValue * 5;
+            manager.robotClass.robotBehaviour.Charge(scoreValue * 2);
             Die();
         }
     }
@@ -175,6 +187,11 @@ public class Enemy : Character
             SetAttachedToBox(true);
         }
         else if (attachedToBox)
+        {
+            SetAttachedToBox(false);
+        }
+
+        if (!enemyBoxCollision.hit)
         {
             SetAttachedToBox(false);
         }
@@ -215,13 +232,12 @@ public class Enemy : Character
         }
     }
 
-    protected override void Die()
+    public override void Die()
     {
         base.Die();
 
         GameObject blood = Object.Instantiate(Resources.Load<GameObject>("Prefab/BloodParticles"));
         blood.transform.position = gameObject.transform.position;
         manager.cameraClass.screenshake = true;
-        manager.score += scoreValue;
     }
 }

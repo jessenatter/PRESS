@@ -13,6 +13,7 @@ public class Manager : MonoBehaviour
     public Player player = new Player();
     public CameraClass cameraClass = new CameraClass();
     public BoxClass boxClass = new BoxClass();
+    public RobotClass robotClass = new RobotClass();
     public WaveManager waveManager = new WaveManager();
     [HideInInspector] public int playerLayer, boxLayer, enemyLayer, wallLayer, score;
     [HideInInspector] public LayerMask playerMask, boxMask, enemyMask, wallMask;
@@ -42,6 +43,7 @@ public class Manager : MonoBehaviour
         BaseClasses.Add(cameraClass);
         BaseClasses.Add(boxClass);
         BaseClasses.Add(waveManager);
+        BaseClasses.Add(robotClass);
 
         foreach (BaseClass _baseClass in BaseClasses)
             _baseClass.Start(this);
@@ -90,6 +92,7 @@ public class Manager : MonoBehaviour
         cameraClass.Update();
         boxClass.Update();
         waveManager.Update();
+        robotClass.Update();
     }
 }
 
@@ -164,7 +167,7 @@ public class BoxClass : BaseClass
     protected Sprite sprite;
     public BoxCollider2D bc;
     public Rigidbody2D rb;
-    protected Vector2 spawnPoint;
+    protected Vector2 spawnPoint = new Vector2(2, 0);
     public BoxBehaviour boxBehaviour;
     protected CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
     //bool hasHitWall;
@@ -194,20 +197,48 @@ public class BoxClass : BaseClass
 
     public override void Update()
     {
+        base.Update();
         boxBehaviour.ClassUpdate();
+    }
+}
 
-        //there is already a wall check this is redundant
+public class RobotClass : BaseClass
+{
+    public GameObject gameObject;
+    protected SpriteRenderer sr;
+    protected Sprite sprite;
+    public BoxCollider2D bc;
+    public Rigidbody2D rb;
+    protected Vector2 spawnPoint;
+    public RobotBehaviour robotBehaviour;
+    protected CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
 
-        /*if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
-        {
-            if (!hasHitWall)
-            {
-                manager.cameraClass.screenshake = true;
-                hasHitWall = true;
-            }
-        }
-        else
-            hasHitWall = false;*/
+    public override void Start(Manager _manager)
+    {
+        base.Start(_manager);
 
+        gameObject = Object.Instantiate(Resources.Load<GameObject>("Prefab/Robot"));
+
+        //Components
+        sr = gameObject.GetComponent<SpriteRenderer>();
+        robotBehaviour = gameObject.GetComponent<RobotBehaviour>();
+        bc = gameObject.GetComponent<BoxCollider2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
+
+        robotBehaviour.bc = bc;
+        robotBehaviour.rb = rb;
+        robotBehaviour.manager = manager;
+        robotBehaviour.player = manager.player;
+
+        gameObject.transform.position = spawnPoint;
+        gameObject.layer = manager.boxLayer;
+
+        robotBehaviour.ClassStart();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        robotBehaviour.ClassUpdate();
     }
 }

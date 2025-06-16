@@ -3,6 +3,7 @@ using UnityEngine;
 public class MovingEntityBehaviour : MonoBehaviour
 {
     [HideInInspector] public Manager manager;
+    [HideInInspector] public Enemy enemy; // only applicable if the character is an enemy
 
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public BoxCollider2D bc;

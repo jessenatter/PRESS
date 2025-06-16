@@ -19,7 +19,7 @@ public class BoxBehaviour : MonoBehaviour
 
     bool isGrabbed;
 
-    BoxCollider2D tempBC;
+    //BoxCollider2D tempBC;
     float defaultDamping;
 
     CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
@@ -29,7 +29,7 @@ public class BoxBehaviour : MonoBehaviour
         playerTransform = player.gameObject.transform;
         defaultDamping = rb.linearDamping;
 
-        tempBC = player.gameObject.AddComponent<BoxCollider2D>(); //stop the box from going through the wall
+        //tempBC = player.gameObject.AddComponent<BoxCollider2D>(); //stop the box from going through the wall
 
         playerMask = LayerMask.GetMask("Player");
         wallMask = LayerMask.GetMask("Wall");
@@ -70,7 +70,7 @@ public class BoxBehaviour : MonoBehaviour
 
     void WallCheck()
     {
-        RaycastHit2D directionRay = Physics2D.Raycast(transform.position, launchDirection, 0.6f, wallMask);
+        RaycastHit2D directionRay = Physics2D.BoxCast(transform.position, bc.size, 0, launchDirection, 0.1f, wallMask);
 
         if (directionRay.collider != null)
         {
@@ -91,19 +91,15 @@ public class BoxBehaviour : MonoBehaviour
             if (player.movingEntityBehaviour.isGrabbing)
             {
                 isGrabbed = true;
-
-                tempBC.size = bc.size;
-                tempBC.offset = new Vector2(transform.position.x - playerTransform.position.x, transform.position.y - playerTransform.position.y);
-
-                tempBC.enabled = true;
-
-                transform.parent = playerTransform;
-
-                rb.simulated = false;
             }
         }
 
-        if (!player.movingEntityBehaviour.isGrabbing)
+        if (isGrabbed)
+        {
+            rb.linearVelocity = player.movingEntityBehaviour.rb.linearVelocity;
+        }
+
+        if (!player.movingEntityBehaviour.isGrabbing || !collisionBehaviour.CheckCollision(playerMask, bc).hit)
         {
             if (isGrabbed)
             {
@@ -115,12 +111,6 @@ public class BoxBehaviour : MonoBehaviour
     public void CancelGrab()
     {
         isGrabbed = false;
-
-        rb.simulated = true;
-        transform.parent = null;
-
-        bc.enabled = true;
-        tempBC.enabled = false;
     }
 
     void Launch(Vector2 dir)
