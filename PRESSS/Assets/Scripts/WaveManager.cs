@@ -135,6 +135,7 @@ public class WaveManager : BaseClass
         unusedSpawnPoints.RemoveAt(randomSpawnPoint);
 
         manager.Characters.Add(enemy);
+        manager.storedVelocities = new Vector2[manager.rbs.Count];
         enemy.Start(manager);
     }
 

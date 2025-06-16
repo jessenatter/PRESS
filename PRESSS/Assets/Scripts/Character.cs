@@ -7,7 +7,7 @@ public class Character : BaseClass
     protected SpriteRenderer sr;
     protected Sprite sprite;
     public BoxCollider2D bc;
-    protected Rigidbody2D rb;
+    public Rigidbody2D rb;
     protected float health = 100;
     public MovingEntityBehaviour movingEntityBehaviour; //all the posible mechanics of a moving entity
     public Vector2 moveVec, spawnPoint = new Vector2(-2, 0);
@@ -34,6 +34,8 @@ public class Character : BaseClass
         movingEntityBehaviour.manager = manager;
 
         gameObject.transform.position = spawnPoint;
+
+        manager.rbs.Add(rb);
     }
 
     override public void Update()
@@ -239,5 +241,6 @@ public class Enemy : Character
         GameObject blood = Object.Instantiate(Resources.Load<GameObject>("Prefab/BloodParticles"));
         blood.transform.position = gameObject.transform.position;
         manager.cameraClass.screenshake = true;
+        manager.StartHitstop(10);
     }
 }

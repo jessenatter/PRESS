@@ -9,8 +9,8 @@ public class Manager : MonoBehaviour
 {
     public List<Character> Characters = new List<Character>();
     List<BaseClass> BaseClasses = new List<BaseClass>();
-    List<Rigidbody2D> rbs = new List<Rigidbody2D>();
-    List<Vector2> storedVelocities = new List<Vector2>();
+    public List<Rigidbody2D> rbs = new List<Rigidbody2D>();
+    public Vector2[] storedVelocities;
 
     public Player player = new Player();
     public CameraClass cameraClass = new CameraClass();
@@ -40,7 +40,9 @@ public class Manager : MonoBehaviour
         Characters.Add(player);
 
         foreach (Character character in Characters)
+        {
             BaseClasses.Add(character);
+        }
 
         BaseClasses.Add(cameraClass);
         BaseClasses.Add(boxClass);
@@ -54,20 +56,22 @@ public class Manager : MonoBehaviour
     void FixedUpdate()
     {
         if (Keyboard.current.rKey.IsPressed()) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-
         Gameplay();
     }
 
     void Gameplay()
     {
-        if (hitStop == false)
+        if (!hitStop)
             UpdateEverything();
         else
         {
             if (hitStopTimer > 0)
                 hitStopTimer--;
             else
+            {
                 hitStop = false;
+                StopHitstop();
+            }
         }
 
         scoreUI.text = "SCORE: " + score.ToString();
@@ -83,6 +87,7 @@ public class Manager : MonoBehaviour
                 if (Characters[i] is Enemy)
                     waveManager.currentEnemyCount--;
 
+                rbs.Remove(Characters[i].rb);
                 Destroy(Characters[i].gameObject);
                 Characters.RemoveAt(i);
             }
@@ -98,6 +103,24 @@ public class Manager : MonoBehaviour
     {
         hitStopTimer = duration;
         hitStop = true;
+
+        storedVelocities = new Vector2[rbs.Count];
+
+        for (int i = 0; i < rbs.Count; i++)
+        {
+            if (rbs[i] == null) continue;
+            storedVelocities[i] = rbs[i].linearVelocity;
+            rbs[i].linearVelocity = Vector2.zero;
+        }
+    }
+
+    void StopHitstop()
+    {
+        for (int i = 0; i < rbs.Count; i++)
+        {
+            if (rbs[i] == null) continue;
+            rbs[i].linearVelocity = storedVelocities[i];
+        }
     }
 }
 
@@ -198,6 +221,7 @@ public class BoxClass : BaseClass
         gameObject.layer = manager.boxLayer;
 
         boxBehaviour.ClassStart();
+        manager.rbs.Add(rb);
     }
 
     public override void Update()
