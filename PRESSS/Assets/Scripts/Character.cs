@@ -223,5 +223,6 @@ public class Enemy : Character
         blood.transform.position = gameObject.transform.position;
         manager.cameraClass.screenshake = true;
         manager.score += scoreValue;
+        manager.StartHitstop(30);
     }
 }

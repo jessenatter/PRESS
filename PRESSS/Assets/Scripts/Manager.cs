@@ -18,7 +18,7 @@ public class Manager : MonoBehaviour
     [HideInInspector] public LayerMask playerMask, boxMask, enemyMask, wallMask;
 
     public bool hitStop = false;
-    float hitStopDuration = 15, hitStopTimer;
+    float hitStopTimer;
 
     public TextMeshProUGUI scoreUI, waveUI;
 
@@ -60,13 +60,10 @@ public class Manager : MonoBehaviour
             UpdateEverything();
         else
         {
-            if (hitStopTimer != hitStopDuration)
-                hitStopTimer++;
+            if (hitStopTimer > 0)
+                hitStopTimer--;
             else
-            {
                 hitStop = false;
-                hitStopTimer = 0;
-            }
         }
 
         scoreUI.text = "SCORE: " + score.ToString();
@@ -90,6 +87,12 @@ public class Manager : MonoBehaviour
         cameraClass.Update();
         boxClass.Update();
         waveManager.Update();
+    }
+
+    public void StartHitstop(float duration)
+    {
+        hitStopTimer = duration;
+        hitStop = true;
     }
 }
 
