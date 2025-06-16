@@ -116,7 +116,6 @@ public class Manager : MonoBehaviour
                         rightSideSpawns++;
                     }
 
-                    
                     enemy.spawnPoint = new Vector2(enemySpawnPoint.x * spawnSide,yPos);
                     Characters.Add(enemy);
                     enemy.Start(this);

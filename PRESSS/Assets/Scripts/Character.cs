@@ -111,6 +111,7 @@ public class Enemy : Character
         gameObject.layer = manager.enemyLayer;
 
         movingEntityBehaviour.moveSpeed = 2.5f;
+        sr.material = Resources.Load<Material>("Materials/Ghost");
     }
 
     public override void Update()
