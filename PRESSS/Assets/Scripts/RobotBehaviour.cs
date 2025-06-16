@@ -24,6 +24,7 @@ public class RobotBehaviour : MonoBehaviour
     {
         charge = gameObject.transform.Find("Charge").gameObject;
         chargeYinitScale = charge.transform.localScale.y;
+        manager.rbs.Add(rb);
     }
 
     // Update is called once per frame
