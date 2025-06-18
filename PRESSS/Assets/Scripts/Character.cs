@@ -60,6 +60,7 @@ public class Character : BaseClass
 public class Player : Character
 {
     public InputManager inputManager = new InputManager();
+    protected TrailRenderer tr;
     public override void Start(Manager _manager)
     {
         name = "Player";
@@ -74,6 +75,20 @@ public class Player : Character
             inputManager.movingEntityBehaviour = movingEntityBehaviour;
             inputManager.Start();
         }
+
+        tr = gameObject.AddComponent<TrailRenderer>();
+        tr.material = Resources.Load<Material>("Materials/Dash");
+        tr.time = .7f;
+
+        AnimationCurve curve = new AnimationCurve();
+        curve.AddKey(0f, 1f); 
+        curve.AddKey(1f, 0f);
+
+        tr.widthCurve = curve;
+        tr.numCornerVertices = 5;
+        tr.numCapVertices = 5;
+        tr.textureMode = LineTextureMode.Stretch;
+        tr.enabled = false;
     }
 
     public override void Update()
@@ -89,6 +104,12 @@ public class Player : Character
         {
             
         }
+
+        if (movingEntityBehaviour.isDashing)
+            tr.enabled = true;
+        else
+            tr.enabled = false;
+
     }
 }
 
