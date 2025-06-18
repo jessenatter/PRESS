@@ -30,6 +30,7 @@ public class Manager : MonoBehaviour
     {
         Upgrades.upgradeMenu = upgradeMenu;
         Upgrades.manager = this;
+        Upgrades.Start();
 
         playerLayer = LayerMask.NameToLayer("Player");
         enemyLayer = LayerMask.NameToLayer("Enemy");
@@ -224,6 +225,7 @@ public class BoxClass : BaseClass
     protected Vector2 spawnPoint = new Vector2(2, 0);
     public BoxBehaviour boxBehaviour;
     protected CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
+    public int lastSortingLayer;
     //bool hasHitWall;
 
     public override void Start(Manager _manager)

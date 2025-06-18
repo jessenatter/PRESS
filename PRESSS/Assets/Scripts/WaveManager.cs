@@ -50,8 +50,7 @@ public class WaveManager : BaseClass
             SpawnWave();
         }
 
-        if(Upgrades.upgradeSelected)
-            EndWave();
+        EndWave();
     }
 
     void StartWave()
@@ -155,5 +154,7 @@ public class WaveManager : BaseClass
                 startedWaveLoad = false;
             }
         }
+        else
+            Upgrades.upgradeOffered = false;
     }
 }
