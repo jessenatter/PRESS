@@ -24,9 +24,13 @@ public class Manager : MonoBehaviour
     float hitStopTimer;
 
     public TextMeshProUGUI scoreUI, waveUI;
+    public GameObject upgradeMenu;
 
     void Awake()
     {
+        Upgrades.upgradeMenu = upgradeMenu;
+        Upgrades.manager = this;
+
         playerLayer = LayerMask.NameToLayer("Player");
         enemyLayer = LayerMask.NameToLayer("Enemy");
         boxLayer = LayerMask.NameToLayer("Box");
@@ -55,7 +59,12 @@ public class Manager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Keyboard.current.rKey.IsPressed()) UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        if (Keyboard.current.rKey.IsPressed())
+        {
+            string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentScene);
+        }
+
         Gameplay();
     }
 
@@ -123,6 +132,21 @@ public class Manager : MonoBehaviour
             if (rbs[i] == null) continue;
             rbs[i].linearVelocity = storedVelocities[i];
         }
+    }
+
+    public void Upgrade1()
+    {
+        Upgrades.SelectUpgrade(Upgrades.offeredUpgrades[0]);
+    }
+
+    public void Upgrade2()
+    {
+        Upgrades.SelectUpgrade(Upgrades.offeredUpgrades[1]);
+    }
+
+    public void Upgrade3()
+    {
+        Upgrades.SelectUpgrade(Upgrades.offeredUpgrades[2]);
     }
 }
 

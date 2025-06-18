@@ -50,7 +50,8 @@ public class WaveManager : BaseClass
             SpawnWave();
         }
 
-        EndWave();
+        if(Upgrades.upgradeSelected)
+            EndWave();
     }
 
     void StartWave()
@@ -77,8 +78,6 @@ public class WaveManager : BaseClass
 
     void SpawnWave()
     {
-        //Debug.Log("SPAWN DELAY TIMER: " + spawnDelay_t.ToString() + " " + "IN BETWEEN TIMER: " + inBetweenWaveTime_t.ToString());
-
         if (!startedWaveLoad)
         {
             StartWave();
@@ -148,8 +147,13 @@ public class WaveManager : BaseClass
     {
         if (currentEnemyCount == 0)
         {
-            waveLoaded = false;
-            startedWaveLoad = false;
+            Upgrades.OfferNewUpgrade();
+
+            if (Upgrades.upgradeSelected)
+            {
+                waveLoaded = false;
+                startedWaveLoad = false;
+            }
         }
     }
 }
