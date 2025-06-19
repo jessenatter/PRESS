@@ -14,7 +14,7 @@ public class RobotBehaviour : MonoBehaviour
     public float maxChargeAmount = 1200;
     public float chargeAmount = 600;
 
-    bool isGrabbed;
+    bool isGrabbed,waitingForGameOver;
 
     GameObject charge;
     float chargeYinitScale;
@@ -102,12 +102,22 @@ public class RobotBehaviour : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("DIE");
-
-        for (int i = 0; i < 5; i++)
+        if (!waitingForGameOver)
         {
-            GameObject sparks = Object.Instantiate(Resources.Load<GameObject>("Prefab/RobotParticles"));
-            sparks.transform.position = gameObject.transform.position;
+            //do a hitstop and screenshake and then load the game over screen
+            manager.StartHitstop(75);
+            manager.cameraClass.Screenshake(Vector2.up, 0.5f, 75f, 1f);
+            waitingForGameOver = true;
+
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject sparks = Object.Instantiate(Resources.Load<GameObject>("Prefab/RobotParticles"));
+                sparks.transform.position = gameObject.transform.position;
+            }
+        }
+        else if(manager.hitStop == false)
+        {
+            manager.GameOver();
         }
     }
 }

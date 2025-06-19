@@ -450,8 +450,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7856007434327791958}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
-        m_MethodName: Continue
+        m_TargetAssemblyTypeName: GameOver, Assembly-CSharp
+        m_MethodName: Menu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11459,7 +11459,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7185176409677900104}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90b8b4c6f0e834ac8911115cf70d9671, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e34b0dbb4cf142d69f5478505a7baed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &7882843816133073360

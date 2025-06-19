@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D;
 using TMPro;
+using UnityEngine.Rendering;
 
 public class Manager : MonoBehaviour
 {
@@ -56,6 +57,9 @@ public class Manager : MonoBehaviour
 
         foreach (BaseClass _baseClass in BaseClasses)
             _baseClass.Start(this);
+
+        cameraClass.gameObject.GetComponent<AudioSource>().volume = GameDataManager.musicVolume * 0.5f;
+        cameraClass.gameObject.transform.GetChild(0).GetComponent<Volume>().enabled = GameDataManager.usePostProcessing;
     }
 
     void FixedUpdate()
@@ -149,6 +153,17 @@ public class Manager : MonoBehaviour
     {
         Upgrades.SelectUpgrade(Upgrades.offeredUpgrades[2]);
     }
+
+    public void GameOver()
+    {
+        if (score > GameDataManager.highscore)
+        {
+            GameDataManager.highscore = score;
+            //new highscore
+        }
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Gameover");
+    }
 }
 
 public class BaseClass
@@ -161,7 +176,7 @@ public class BaseClass
 
 public class CameraClass : BaseClass
 {
-    GameObject gameObject;
+    public GameObject gameObject;
     public bool screenshake;
     float screenShakeTimer, screenshakeDuration = 20, shakeFrequency = 1, shakeMagnitude = 0.1f;
     public Vector2 screenShakeDir; // more like axis

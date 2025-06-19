@@ -144,17 +144,25 @@ public class WaveManager : BaseClass
 
     void EndWave()
     {
-        if (currentEnemyCount == 0)
+        if (wave != 0)
         {
-            Upgrades.OfferNewUpgrade();
-
-            if (Upgrades.upgradeSelected)
+            if (currentEnemyCount == 0)
             {
-                waveLoaded = false;
-                startedWaveLoad = false;
+                Upgrades.OfferNewUpgrade();
+
+                if (Upgrades.upgradeSelected)
+                {
+                    waveLoaded = false;
+                    startedWaveLoad = false;
+                }
             }
+            else
+                Upgrades.upgradeOffered = false;
         }
         else
-            Upgrades.upgradeOffered = false;
+        {
+            waveLoaded = false;
+            startedWaveLoad = false;
+        }
     }
 }
