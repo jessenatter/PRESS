@@ -61,6 +61,8 @@ public class Player : Character
 {
     public InputManager inputManager = new InputManager();
     protected TrailRenderer tr;
+    protected float trailAlpha = 0;
+
     public override void Start(Manager _manager)
     {
         name = "Player";
@@ -78,17 +80,17 @@ public class Player : Character
 
         tr = gameObject.AddComponent<TrailRenderer>();
         tr.material = Resources.Load<Material>("Materials/Dash");
-        tr.time = .7f;
+        tr.time = .5f;
 
         AnimationCurve curve = new AnimationCurve();
-        curve.AddKey(0f, 1f); 
-        curve.AddKey(1f, 0f);
+        curve.AddKey(0f, 1f);
+        curve.AddKey(1f, 0.2f);
 
         tr.widthCurve = curve;
-        tr.numCornerVertices = 5;
-        tr.numCapVertices = 5;
+        tr.numCornerVertices = 8;
+        tr.numCapVertices = 8;
+        tr.minVertexDistance = 0.02f;
         tr.textureMode = LineTextureMode.Stretch;
-        tr.enabled = false;
     }
 
     public override void Update()
@@ -105,11 +107,17 @@ public class Player : Character
             
         }
 
-        if (movingEntityBehaviour.isDashing)
-            tr.enabled = true;
-        else
-            tr.enabled = false;
+        float lerpSpeed = 0.1f;
 
+        if (movingEntityBehaviour.isDashing)
+            trailAlpha = Mathf.Lerp(trailAlpha,1,lerpSpeed);
+        else
+            trailAlpha = Mathf.Lerp(trailAlpha, 0, lerpSpeed);
+
+        Color color = new Color (1,1,1,trailAlpha);
+
+        tr.startColor = color;
+        tr.endColor = color;
     }
 }
 

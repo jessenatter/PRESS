@@ -50,6 +50,13 @@ public static class Upgrades
             {
                 int index = Random.Range(0, possibleUpgrades.Count);
                 Upgrade _offeredUpgrade = possibleUpgrades[index];
+
+                for(int j = 0; j < offeredUpgrades.Count; j++)
+                {
+                    while(_offeredUpgrade == offeredUpgrades[j])
+                        _offeredUpgrade = possibleUpgrades[Random.Range(0, possibleUpgrades.Count)];
+                }
+
                 offeredUpgrades.Add(_offeredUpgrade);
                 upgradeImages[i].sprite = _offeredUpgrade.sprite;
                 upgradeTexts[i].text = _offeredUpgrade.name;
@@ -108,7 +115,7 @@ public class IncreaseBoxSize : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        float newScale = manager.boxClass.gameObject.transform.localScale.x * 1.5f;
+        float newScale = manager.boxClass.gameObject.transform.localScale.x * 1.3f;
         manager.boxClass.gameObject.transform.localScale = new Vector2(newScale, newScale);
     }
 }
@@ -155,7 +162,7 @@ public class Bounce : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        //manager.boxClass.rb.sharedMaterial.bounciness += 0.33f;
+        manager.boxClass.boxBehaviour.bounce += 0.25f;
     }
 }
 
@@ -171,7 +178,7 @@ public class Speed : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        manager.player.movingEntityBehaviour.moveSpeed *= 1.5f;
-        manager.player.movingEntityBehaviour.dashSpeed *= 1.5f;
+        manager.player.movingEntityBehaviour.moveSpeed *= 1.3f;
+        manager.player.movingEntityBehaviour.dashSpeed *= 1.3f;
     }
 }

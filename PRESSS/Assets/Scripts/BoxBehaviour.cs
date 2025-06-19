@@ -21,6 +21,7 @@ public class BoxBehaviour : MonoBehaviour
 
     //BoxCollider2D tempBC;
     float defaultDamping;
+    public float bounce = 0;
 
     CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
 
@@ -124,7 +125,7 @@ public class BoxBehaviour : MonoBehaviour
     public void CancelLaunch()
     {
         isLaunched = false;
-        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = -rb.linearVelocity * bounce;
         rb.linearDamping = defaultDamping;
     }
 
