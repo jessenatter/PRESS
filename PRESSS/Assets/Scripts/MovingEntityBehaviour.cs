@@ -143,3 +143,16 @@ public class CollisionBehaviour
         return returnValue;
     }
 }
+
+public class MagnetBehavior
+{
+    public Rigidbody2D rb;
+    public GameObject subject, target;
+    public float magnetSpeed;
+
+    public void magnetUpdate()
+    {
+        Vector2 magnetForce = target.transform.position - subject.transform.position;
+        rb.AddForce(magnetForce * magnetSpeed);
+    }
+}

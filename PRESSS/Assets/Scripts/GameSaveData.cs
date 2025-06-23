@@ -2,6 +2,9 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.U2D;
 
 public class Menu : MonoBehaviour
 {
@@ -80,6 +83,7 @@ public static class GameDataManager
     public static int savedWave = 0;
     public static int savedScore = 0;
     public static int highscore = 0;
+    public static List<Upgrade> savedUpgrades = new List<Upgrade>();
 
     public static float musicVolume = 1,soundEffectVolume = 1;
     public static bool usePostProcessing = true;
@@ -92,6 +96,7 @@ public static class GameDataManager
         soundEffectVolume = 1;
         usePostProcessing = true;
         highscore = 0;
+        savedUpgrades.Clear();
     }
 
     public static void SaveToDisk()
@@ -123,6 +128,7 @@ public static class GameDataManager
             musicVolume = data.musicVolume;
             soundEffectVolume = data.soundEffectVolume;
             usePostProcessing = data.usePostProcessing;
+            savedUpgrades = data.savedUpgrades;
         }
     }
 
@@ -146,4 +152,5 @@ public class SaveData
     public float musicVolume;
     public float soundEffectVolume;
     public bool usePostProcessing;
+    public List<Upgrade> savedUpgrades = new List<Upgrade>();
 }

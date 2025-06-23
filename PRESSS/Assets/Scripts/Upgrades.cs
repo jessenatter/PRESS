@@ -19,13 +19,17 @@ public static class Upgrades
 
     public static void Start()
     {
-        IncreaseBoxSize increaseBoxSize = new IncreaseBoxSize();
-        Spikes spikes = new Spikes();
-        Stun stun = new Stun();
-        Bounce bounce = new Bounce();
-        Speed speed = new Speed();
+        foreach (Upgrade upgrade in GameDataManager.savedUpgrades)
+        {
+            activeUpgrades.Add(upgrade);
+            upgrade.ActivateUpgrade();
+        }
 
-        possibleUpgrades.AddRange(new Upgrade[] { increaseBoxSize,spikes,stun,bounce,speed, });
+        Stun stun = new Stun();
+        Speed speed = new Speed();
+        Magnet magnet = new Magnet();
+
+        possibleUpgrades.AddRange(new Upgrade[] { magnet,stun,speed, });
 
         foreach (Upgrade upgrade in possibleUpgrades)
             upgrade.StartUpgrade(manager);
@@ -48,7 +52,9 @@ public static class Upgrades
             offeredUpgrades.Clear();
             for (int i = 0; i < 3; i++)
             {
-                int index = Random.Range(0, possibleUpgrades.Count);
+                //int index = Random.Range(0, possibleUpgrades.Count);
+                int index = i;
+
                 Upgrade _offeredUpgrade = possibleUpgrades[index];
 
                 for(int j = 0; j < offeredUpgrades.Count; j++)
@@ -72,6 +78,7 @@ public static class Upgrades
         selectedUpgrade.ActivateUpgrade();
         upgradeSelected = true;
         upgradeMenu.SetActive(false);
+        GameDataManager.savedUpgrades.Add(selectedUpgrade);
     }
 }
 
@@ -103,38 +110,6 @@ public class Upgrade
     }
 }
 
-public class IncreaseBoxSize : Upgrade
-{
-    public override void StartUpgrade(Manager _manager)
-    {
-        base.StartUpgrade(_manager);
-        name = "Increase Size";
-        sprite = Object.Instantiate(Resources.Load<Sprite>("Sprites/Upgrades/Scale"));
-    }
-
-    public override void ActivateUpgrade()
-    {
-        base.ActivateUpgrade();
-        float newScale = manager.boxClass.gameObject.transform.localScale.x * 1.3f;
-        manager.boxClass.gameObject.transform.localScale = new Vector2(newScale, newScale);
-    }
-}
-
-public class Spikes : Upgrade
-{
-    public override void StartUpgrade(Manager _manager)
-    {
-        base.StartUpgrade(_manager);
-        name = "Spikes";
-        sprite = Object.Instantiate(Resources.Load<Sprite>("Sprites/Upgrades/Spikes"));
-    }
-
-    public override void ActivateUpgrade()
-    {
-        base.ActivateUpgrade();
-    }
-}
-
 public class Stun : Upgrade
 {
     public override void StartUpgrade(Manager _manager)
@@ -147,22 +122,7 @@ public class Stun : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-    }
-}
-
-public class Bounce : Upgrade
-{
-    public override void StartUpgrade(Manager _manager)
-    {
-        base.StartUpgrade(_manager);
-        name = "Increase Bounce";
-        sprite = Object.Instantiate(Resources.Load<Sprite>("Sprites/Upgrades/Bounce"));
-    }
-
-    public override void ActivateUpgrade()
-    {
-        base.ActivateUpgrade();
-        manager.boxClass.boxBehaviour.bounce += 0.25f;
+        manager.boxClass.boxBehaviour.stunTime += 15;
     }
 }
 
@@ -178,7 +138,23 @@ public class Speed : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        manager.player.movingEntityBehaviour.moveSpeed *= 1.3f;
-        manager.player.movingEntityBehaviour.dashSpeed *= 1.3f;
+        manager.player.movingEntityBehaviour.moveSpeed *= 1.2f;
+        manager.player.movingEntityBehaviour.dashSpeed *= 1.2f;
+    }
+}
+
+public class Magnet : Upgrade
+{
+    public override void StartUpgrade(Manager _manager)
+    {
+        base.StartUpgrade(_manager);
+        name = "Increase Magnet";
+        //sprite = Object.Instantiate(Resources.Load<Sprite>("Sprites/Upgrades/Magnet"));
+    }
+
+    public override void ActivateUpgrade()
+    {
+        base.ActivateUpgrade();
+        manager.boxClass.magnetBehavior.magnetSpeed += 0.3f;
     }
 }

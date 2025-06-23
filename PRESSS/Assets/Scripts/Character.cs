@@ -18,7 +18,11 @@ public class Character : BaseClass
     {
         base.Start(_manager);
 
-        gameObject = Object.Instantiate(Resources.Load<GameObject>("Prefab/Character"));
+        if(Resources.Load<GameObject>("Prefab/" + name) == null)
+            gameObject = Object.Instantiate(Resources.Load<GameObject>("Prefab/Character"));
+        else
+            gameObject = Object.Instantiate(Resources.Load<GameObject>("Prefab/" + name));
+
         gameObject.name = name;
 
         //Components
@@ -78,19 +82,7 @@ public class Player : Character
             inputManager.Start();
         }
 
-        tr = gameObject.AddComponent<TrailRenderer>();
-        tr.material = Resources.Load<Material>("Materials/Dash");
-        tr.time = .5f;
-
-        AnimationCurve curve = new AnimationCurve();
-        curve.AddKey(0f, 1f);
-        curve.AddKey(1f, 0.2f);
-
-        tr.widthCurve = curve;
-        tr.numCornerVertices = 8;
-        tr.numCapVertices = 8;
-        tr.minVertexDistance = 0.02f;
-        tr.textureMode = LineTextureMode.Stretch;
+        tr = gameObject.GetComponent<TrailRenderer>();
     }
 
     public override void Update()
@@ -98,21 +90,14 @@ public class Player : Character
         base.Update();
 
         if (movingEntityBehaviour != null)
-        {
             inputManager.Update();
-        }
 
-        if (collisionBehaviour.CheckCollision(manager.enemyMask, bc).hit)
-        {
-            
-        }
-
-        float lerpSpeed = 0.1f;
+        float lerpSpeed = 0.5f;
 
         if (movingEntityBehaviour.isDashing)
-            trailAlpha = Mathf.Lerp(trailAlpha,1,lerpSpeed);
+            trailAlpha = Mathf.Lerp(trailAlpha, 1, lerpSpeed);
         else
-            trailAlpha = Mathf.Lerp(trailAlpha, 0, lerpSpeed);
+            trailAlpha = Mathf.Lerp(trailAlpha, 0.3f, lerpSpeed);
 
         Color color = new Color (1,1,1,trailAlpha);
 
@@ -123,8 +108,9 @@ public class Player : Character
 
 public class Enemy : Character
 {
-    bool attachedToBox;
-    
+    bool attachedToBox,stunned;
+
+    float stunTimer;
     float squishSpeed = 0.01f;
     int scoreValue = 100;
 
@@ -145,13 +131,16 @@ public class Enemy : Character
         movingEntityBehaviour.enemy = this;
 
         sr.material = Resources.Load<Material>("Materials/Ghost");
+        GameObject spawnParticles = Object.Instantiate(Resources.Load<GameObject>("Prefab/SpawnParticles"));
+        spawnParticles.transform.position = gameObject.transform.position;
+        spawnParticles.transform.SetParent(gameObject.transform);
     }
 
     public override void Update()
     {
         Vector2 moveVector = target.transform.position - gameObject.transform.position;
 
-        if (Mathf.Round(moveVector.magnitude) == 0 || attachedToBox)
+        if (Mathf.Round(moveVector.magnitude) == 0 || attachedToBox || stunned)
             movingEntityBehaviour.moveInput = Vector2.zero;
         else
             movingEntityBehaviour.moveInput = moveVector;
@@ -161,14 +150,29 @@ public class Enemy : Character
         FlipSprite();
         AttachBoxCheck();
 
+        if(stunned)
+        {
+            stunTimer--;
+            if (stunTimer == 0)
+                stunned = false;
+        }
+
         if (collisionBehaviour.CheckCollision(manager.boxMask, bc).hit)
         {
+            if(manager.boxClass.boxBehaviour.stunTime != 0 && !stunned)
+            {
+                stunTimer = manager.boxClass.boxBehaviour.stunTime;
+                stunned = true;
+                GameObject stunParticles = Object.Instantiate(Resources.Load<GameObject>("Prefab/StunParticles"));
+                stunParticles.transform.position = gameObject.transform.position;
+                stunParticles.transform.SetParent(gameObject.transform);
+            }
+
             if (collisionBehaviour.CheckCollision(manager.wallMask, bc).hit)
             {
                 if (manager.boxClass.boxBehaviour.isLaunched)
                 {
                     manager.score += scoreValue;
-                    manager.robotClass.robotBehaviour.Charge(scoreValue);
                     Die();
                 }
                 else if (attachedToBox)
@@ -183,9 +187,26 @@ public class Enemy : Character
         if (gameObject.transform.localScale.magnitude <= 1.05f)
         {
             manager.score += scoreValue * 5;
-            manager.robotClass.robotBehaviour.Charge(scoreValue * 2);
+
+            for(int i = 0; i < 3; i++)
+            {
+                CreateChargeParticle();
+            }
+
             Die();
         }
+    }
+
+    void CreateChargeParticle()
+    {
+        //create particle prefab and then give it magnet behavior to attract to robot
+        GameObject chargeParticle = Object.Instantiate(Resources.Load<GameObject>("Prefab/ChargeParticle"));
+        MagnetBehavior particle = new MagnetBehavior();
+        particle.subject = chargeParticle;
+        particle.magnetSpeed = 3f;
+        particle.target = manager.robotClass.gameObject;
+        particle.rb = chargeParticle.GetComponent<Rigidbody2D>();
+        manager.robotClass.robotBehaviour.chargeParticles.Add(particle);
     }
 
     void FlipSprite()

@@ -31,7 +31,6 @@ public class Manager : MonoBehaviour
     {
         Upgrades.upgradeMenu = upgradeMenu;
         Upgrades.manager = this;
-        Upgrades.Start();
 
         playerLayer = LayerMask.NameToLayer("Player");
         enemyLayer = LayerMask.NameToLayer("Enemy");
@@ -60,6 +59,7 @@ public class Manager : MonoBehaviour
 
         cameraClass.gameObject.GetComponent<AudioSource>().volume = GameDataManager.musicVolume * 0.5f;
         cameraClass.gameObject.transform.GetChild(0).GetComponent<Volume>().enabled = GameDataManager.usePostProcessing;
+        Upgrades.Start();
     }
 
     void FixedUpdate()
@@ -242,6 +242,7 @@ public class BoxClass : BaseClass
     protected CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
     public int lastSortingLayer;
     //bool hasHitWall;
+    public MagnetBehavior magnetBehavior = new MagnetBehavior();
 
     public override void Start(Manager _manager)
     {
@@ -265,12 +266,18 @@ public class BoxClass : BaseClass
 
         boxBehaviour.ClassStart();
         manager.rbs.Add(rb);
+        magnetBehavior.target = manager.player.gameObject;
+        magnetBehavior.subject = gameObject;
+        magnetBehavior.rb = rb;
     }
 
     public override void Update()
     {
         base.Update();
         boxBehaviour.ClassUpdate();
+
+        if(!boxBehaviour.isLaunched)
+            magnetBehavior.magnetUpdate();
     }
 }
 

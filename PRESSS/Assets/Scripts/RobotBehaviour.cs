@@ -1,7 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.U2D;
+using TMPro;
+using UnityEngine.Rendering;
 
 public class RobotBehaviour : MonoBehaviour
 {
+    public List<MagnetBehavior> chargeParticles = new List<MagnetBehavior>();
+
     [HideInInspector] public Manager manager;
     [HideInInspector] public Player player;
 
@@ -34,7 +42,20 @@ public class RobotBehaviour : MonoBehaviour
         charge.gameObject.transform.localScale = new Vector2(charge.transform.localScale.x, chargeYinitScale * chargeOutOf1);
 
         TakeDamage();
-        GrabCheck();
+        //GrabCheck();
+
+        for (int i = chargeParticles.Count - 1; i >= 0; i--)
+        {
+            MagnetBehavior particle = chargeParticles[i];
+            particle.magnetUpdate();
+
+            if (Vector2.Distance(particle.subject.transform.position, transform.position) < 0.1f)
+            {
+                Charge(100);
+                Destroy(particle.subject);
+                chargeParticles.RemoveAt(i);
+            }
+        }
     }
 
     public void Charge(int addedCharge)

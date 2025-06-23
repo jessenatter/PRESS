@@ -9,7 +9,6 @@ public class GameOver : MonoBehaviour
     {
         highScore = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         highScore.text = "HIGH SCORE: " + GameDataManager.highscore.ToString();
-
     }
 
     public void Menu()

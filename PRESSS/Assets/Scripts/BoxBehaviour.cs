@@ -21,7 +21,7 @@ public class BoxBehaviour : MonoBehaviour
 
     //BoxCollider2D tempBC;
     float defaultDamping;
-    public float bounce = 0;
+    public float stunTime = 0;
 
     CollisionBehaviour collisionBehaviour = new CollisionBehaviour();
 
@@ -71,7 +71,8 @@ public class BoxBehaviour : MonoBehaviour
 
     void WallCheck()
     {
-        RaycastHit2D directionRay = Physics2D.BoxCast(transform.position, bc.size, 0, launchDirection, 0.1f, wallMask);
+        //make the boxcast a bit bigger so we can bounce, not just hit wall and loose velocity 
+        RaycastHit2D directionRay = Physics2D.BoxCast(transform.position, bc.size * 1.005f, 0, launchDirection, 0.1f, wallMask);
 
         if (directionRay.collider != null)
         {
@@ -125,7 +126,6 @@ public class BoxBehaviour : MonoBehaviour
     public void CancelLaunch()
     {
         isLaunched = false;
-        rb.linearVelocity = -rb.linearVelocity * bounce;
         rb.linearDamping = defaultDamping;
     }
 
