@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: aba477735e8a84ed2b3a14e48131d5b9
+guid: b3c7e40ea68444b94b7ca92c8ee2c241
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4073805992256346686
-    second: Untitled_Artwork 15_0
+      213: 2945005393778945020
+    second: Untitled_Artwork 18_0
   - first:
-      213: 6045259524829996206
-    second: Untitled_Artwork 15_1
+      213: 5221599367017333545
+    second: Untitled_Artwork 18_1
   - first:
-      213: 3713620058421131371
-    second: Untitled_Artwork 15_2
-  - first:
-      213: -2386280050381400817
-    second: Untitled_Artwork 15_3
+      213: 5511493943828888152
+    second: Untitled_Artwork 18_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -148,13 +145,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Untitled_Artwork 15_0
+      name: Untitled_Artwork 18_0
       rect:
         serializedVersion: 2
-        x: 319
-        y: 567
-        width: 159
-        height: 175
+        x: 267
+        y: 719
+        width: 102
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e3a1c4c47f0198830800000000000000
-      internalID: 4073805992256346686
+      spriteID: cfbadc56dc2ced820800000000000000
+      internalID: 2945005393778945020
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Untitled_Artwork 15_1
+      name: Untitled_Artwork 18_1
       rect:
         serializedVersion: 2
-        x: 546
-        y: 567
-        width: 159
-        height: 175
+        x: 655
+        y: 719
+        width: 102
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -185,20 +182,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ea4e988328315e350800000000000000
-      internalID: 6045259524829996206
+      spriteID: 923097685f8d67840800000000000000
+      internalID: 5221599367017333545
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Untitled_Artwork 15_2
+      name: Untitled_Artwork 18_2
       rect:
         serializedVersion: 2
-        x: 319
-        y: 282
-        width: 159
-        height: 175
+        x: 263
+        y: 302
+        width: 498
+        height: 414
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -207,30 +204,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b68f4fc74cd698330800000000000000
-      internalID: 3713620058421131371
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Untitled_Artwork 15_3
-      rect:
-        serializedVersion: 2
-        x: 546
-        y: 282
-        width: 159
-        height: 175
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f055a6eefea32eed0800000000000000
-      internalID: -2386280050381400817
+      spriteID: 85a33af6a82cc7c40800000000000000
+      internalID: 5511493943828888152
       vertices: []
       indices: 
       edges: []
@@ -249,10 +224,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Untitled_Artwork 15_0: 4073805992256346686
-      Untitled_Artwork 15_1: 6045259524829996206
-      Untitled_Artwork 15_2: 3713620058421131371
-      Untitled_Artwork 15_3: -2386280050381400817
+      Untitled_Artwork 18_0: 2945005393778945020
+      Untitled_Artwork 18_1: 5221599367017333545
+      Untitled_Artwork 18_2: 5511493943828888152
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

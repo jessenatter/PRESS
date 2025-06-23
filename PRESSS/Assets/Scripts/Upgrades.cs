@@ -100,13 +100,7 @@ public class Upgrade
 
     public virtual void ActivateUpgrade()
     {
-        GameObject newSpriteLayer = new GameObject("SpriteLayer");
-        newSpriteLayer.transform.position = manager.boxClass.gameObject.transform.position;
-        newSpriteLayer.transform.SetParent(manager.boxClass.gameObject.transform);
-        SpriteRenderer sr = newSpriteLayer.AddComponent<SpriteRenderer>();
-        sr.sprite = sprite;
-        sr.sortingOrder = manager.boxClass.lastSortingLayer + 1;
-        manager.boxClass.lastSortingLayer += 1;
+
     }
 }
 
@@ -149,7 +143,7 @@ public class Magnet : Upgrade
     {
         base.StartUpgrade(_manager);
         name = "Increase Magnet";
-        //sprite = Object.Instantiate(Resources.Load<Sprite>("Sprites/Upgrades/Magnet"));
+        sprite = Object.Instantiate(Resources.Load<Sprite>("Sprites/Upgrades/Magnet"));
     }
 
     public override void ActivateUpgrade()
