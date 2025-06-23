@@ -134,7 +134,7 @@ public class Manager : MonoBehaviour
     {
         for (int i = 0; i < rbs.Count; i++)
         {
-            if (rbs[i] == null) continue;
+            if (rbs[i] == null || i >= storedVelocities.Length) continue;
             rbs[i].linearVelocity = storedVelocities[i];
         }
     }

@@ -49,7 +49,7 @@ public class RobotBehaviour : MonoBehaviour
             MagnetBehavior particle = chargeParticles[i];
             particle.magnetUpdate();
 
-            if (Vector2.Distance(particle.subject.transform.position, transform.position) < 0.1f)
+            if (Vector2.Distance(particle.subject.transform.position, transform.position) < 0.4f)
             {
                 Charge(100);
                 Destroy(particle.subject);

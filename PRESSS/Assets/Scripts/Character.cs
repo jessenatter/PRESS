@@ -202,9 +202,10 @@ public class Enemy : Character
         //create particle prefab and then give it magnet behavior to attract to robot
         GameObject chargeParticle = Object.Instantiate(Resources.Load<GameObject>("Prefab/ChargeParticle"));
         MagnetBehavior particle = new MagnetBehavior();
+        chargeParticle.transform.position = gameObject.transform.position;
         particle.subject = chargeParticle;
-        particle.magnetSpeed = 3f;
-        particle.target = manager.robotClass.gameObject;
+        particle.magnetSpeed = 1f;
+        particle.target = manager.robotClass.robotBehaviour.gameObject;
         particle.rb = chargeParticle.GetComponent<Rigidbody2D>();
         manager.robotClass.robotBehaviour.chargeParticles.Add(particle);
     }

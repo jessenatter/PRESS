@@ -153,6 +153,6 @@ public class MagnetBehavior
     public void magnetUpdate()
     {
         Vector2 magnetForce = target.transform.position - subject.transform.position;
-        rb.AddForce(magnetForce * magnetSpeed);
+        rb.AddForce(magnetForce.normalized * magnetSpeed);
     }
 }
