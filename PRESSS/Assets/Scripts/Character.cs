@@ -82,6 +82,7 @@ public class Player : Character
             inputManager.Start();
         }
 
+        movingEntityBehaviour.moveSpeed = 4f;
         tr = gameObject.GetComponent<TrailRenderer>();
     }
 
@@ -127,7 +128,7 @@ public class Enemy : Character
         gameObject.layer = manager.enemyLayer;
         target = manager.robotClass.gameObject;
 
-        movingEntityBehaviour.moveSpeed = 1f;
+        movingEntityBehaviour.moveSpeed = .8f;
         movingEntityBehaviour.enemy = this;
 
         sr.material = Resources.Load<Material>("Materials/Ghost");

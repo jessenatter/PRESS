@@ -149,6 +149,6 @@ public class Magnet : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        manager.boxClass.magnetBehavior.magnetSpeed += 0.3f;
+        manager.boxClass.magnetBehavior.magnetSpeed += 0.5f;
     }
 }
