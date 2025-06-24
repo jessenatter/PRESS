@@ -128,7 +128,7 @@ public class Enemy : Character
         gameObject.layer = manager.enemyLayer;
         target = manager.robotClass.gameObject;
 
-        movingEntityBehaviour.moveSpeed = .8f;
+        movingEntityBehaviour.moveSpeed = .5f;
         movingEntityBehaviour.enemy = this;
 
         sr.material = Resources.Load<Material>("Materials/Ghost");

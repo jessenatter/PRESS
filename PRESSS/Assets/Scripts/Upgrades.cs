@@ -116,7 +116,7 @@ public class Stun : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        manager.boxClass.boxBehaviour.stunTime += 15;
+        manager.boxClass.boxBehaviour.stunTime += 80;
     }
 }
 
@@ -132,8 +132,8 @@ public class Speed : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        manager.player.movingEntityBehaviour.moveSpeed *= 1.2f;
-        manager.player.movingEntityBehaviour.dashSpeed *= 1.2f;
+        manager.player.movingEntityBehaviour.moveSpeed *= 1.5f;
+        manager.player.movingEntityBehaviour.dashSpeed *= 1.5f;
     }
 }
 
@@ -149,6 +149,6 @@ public class Magnet : Upgrade
     public override void ActivateUpgrade()
     {
         base.ActivateUpgrade();
-        manager.boxClass.magnetBehavior.magnetSpeed += 0.5f;
+        manager.boxClass.magnetBehavior.magnetSpeed += 1.5f;
     }
 }
